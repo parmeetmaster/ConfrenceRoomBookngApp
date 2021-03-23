@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kkconferences/global/constants.dart';
 
 class CustomAppBar extends StatelessWidget {
   @override
@@ -12,7 +13,7 @@ class CustomAppBar extends StatelessWidget {
         padding: EdgeInsets.only(left: 15, top: 25),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors:[Colors.orange[200], Colors.pinkAccent]
+              colors:color_grid
           ),
         ),
         child: Row(

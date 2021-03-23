@@ -32,7 +32,6 @@ dependencies:
   #update as per need
   shared_preferences:
   provider: ^4.3.3
-  shutdown: ^0.4.2
   uuid: 2.2.2
   cloud_firestore: ^0.16.0
   firebase_auth: "^0.20.1"
@@ -43,15 +42,13 @@ dependencies:
   dio: ^3.0.10
   url_launcher: ^5.7.4
   logger: ^0.9.4
-  flutter_swiper: ^1.1.6
   auto_route: ^0.6.9
-  assorted_layout_widgets: ^3.0.1
   path: ^1.7.0
   sms_autofill: ^1.2.1
   fluttertoast: ^7.1.6
   image_picker: ^0.6.7+22
   flutter_svg: 0.18.1
-  solid_bottom_sheet: ^0.1.9
+  bordered_text: ^1.0.0
 
 dev_dependencies:
   flutter_test:

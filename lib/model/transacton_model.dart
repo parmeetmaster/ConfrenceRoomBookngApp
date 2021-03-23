@@ -1,6 +1,6 @@
 
 
-class BookingModel{
+class TransactionModel{
 
   String id;
   DateTime booktime;

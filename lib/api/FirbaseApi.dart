@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kkconferences/global/Global.dart';
 import 'package:kkconferences/model/customer.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,16 +12,22 @@ class FireBaseApi {
         email: "abc@gmail.com",
         password: "1236547899",
         phno: "98191855655",
-        date: DateTime.now());
+        created_at: DateTime.now());
   }
 
   createCustomer(Customer customer) async {
+    bool user_flag = await checkUserExist(customer);
+    if (user_flag == true) {
+      return CustomerResult(status: 0, msg: "User Already Exist");
+    }
+
     var uuid = Uuid();
     customer.customerId = uuid.v4();
     FirebaseFirestore.instance
         .collection("Customers")
         .add(customer.toJson())
         .then((value) {});
+    return CustomerResult(status: 1, msg: "User Created successfully");
   }
 
 /*  getByDate(){
@@ -35,7 +42,7 @@ class FireBaseApi {
 
   }*/
 
-  getCustomer(Customer customer) async {
+  Future<QuerySnapshot> getCustomer(Customer customer) async {
     return await FirebaseFirestore.instance
         .collection("Customers")
         .where("email", isEqualTo: customer.email)
@@ -52,17 +59,28 @@ class FireBaseApi {
     if (snapshot != null) {
       if (snapshot.size > 0) {
         return true;
-      }else{
+      } else {
         return false;
       }
-    }else{
+    } else {
       return null;
     }
+  }
 
-    /* snapshot.docs.forEach((result) {
-     print("data is here ${result.data()}");
-   }
-   );
-*/
+  signIn(Customer customer) async {
+    QuerySnapshot snapshot = await getCustomer(customer);
+    try {
+      QueryDocumentSnapshot result = snapshot.docs.first;
+      if (result.exists) {
+        if(customer.password==result.get("password") && customer.email==result.get("email")){
+          return CustomerResult(status: 1,msg: "Login Successfull",customer: Customer.fromJson(result.data()));
+        }else{
+          return    CustomerResult(status: 0,msg: "User not found");
+        }
+      }
+    } catch (e) {
+      return CustomerResult(status: 0,msg: "User not found");
+
+    }
   }
 }

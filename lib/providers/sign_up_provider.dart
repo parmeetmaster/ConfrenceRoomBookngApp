@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:kkconferences/api/FirbaseApi.dart';
+import 'package:kkconferences/global/Global.dart';
+import 'package:kkconferences/global/const_funcitons.dart';
+import 'package:kkconferences/model/customer.dart';
+import 'package:kkconferences/utils/validation.dart';
+import 'package:uuid/uuid.dart';
 
 class SignUpProvider extends ChangeNotifier {
   var firestoreInstance = FirebaseFirestore.instance;
@@ -9,50 +14,66 @@ class SignUpProvider extends ChangeNotifier {
   TextEditingController emailcontroller = new TextEditingController();
   TextEditingController phonecontroller = new TextEditingController();
   TextEditingController passwordcontroller = new TextEditingController();
-  final GlobalKey<ScaffoldState> scaffoldkey_signup = new GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> skey;
   BuildContext context;
-
-  setContext(BuildContext mcontext) {
-    context = mcontext;
-  }
 
   bool performBasicValidation() {
     bool iserror = false;
     if (firstnamecontroller.text.isEmpty) {
-      scaffoldkey_signup.currentState
+      skey.currentState
           .showSnackBar(new SnackBar(content: Text("FirstName is Undefined")));
       iserror = true;
     }
 
     if (emailcontroller.text.isEmpty) {
-      scaffoldkey_signup.currentState
+      skey.currentState
           .showSnackBar(new SnackBar(content: Text("Email is Undefined")));
       iserror = true;
     }
     if (phonecontroller.text.isEmpty) {
-      scaffoldkey_signup.currentState.showSnackBar(
+      skey.currentState.showSnackBar(
           new SnackBar(content: Text("Phone Number is Undefined")));
       iserror = true;
     }
     if (passwordcontroller.text.isEmpty) {
-      scaffoldkey_signup.currentState
+      skey.currentState
           .showSnackBar(new SnackBar(content: Text("Password is Undefined")));
       iserror = true;
     }
 
-    bool emailValid = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(emailcontroller.text);
-
-    if (emailValid == false) {
-      scaffoldkey_signup.currentState
+    if (Validation().isEmailValid(emailcontroller.text) == false) {
+      skey.currentState
           .showSnackBar(new SnackBar(content: Text("Email Format Incorrect")));
-      iserror = true;
     }
+    if (Validation().isPhoneNumberValid(phonecontroller.text) == false) {
+      skey.currentState.showSnackBar(
+          new SnackBar(content: Text("Phone Number must be 10 digits")));
+    }
+
     return iserror;
   }
 
-  Future<void> addNewUser() async {
+  createUser() async {
+    if (checkButtonEnable() == true) {
+      disableButton();
+      print("action started");
+    }else{
+      return;
+    }
+    bool iserror = performBasicValidation();
+    if (iserror == true) return;
+    Customer customer= Customer(
+        customerId: getUuid(),
+        customerName: firstnamecontroller.text + lastnamecontroller.text,
+        created_at: DateTime.now(),
+        email: emailcontroller.text,
+        phno: phonecontroller.text,
+        password: passwordcontroller.text);
+    CustomerResult res = await FireBaseApi().createCustomer(customer) as CustomerResult;
+    showMessage(this.skey, res.msg);
 
+    if (res.status == 1) {
+      Global.activeCustomer=customer;
+    }
   }
 }

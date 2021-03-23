@@ -15,7 +15,7 @@ class Customer {
     this.phno,
     this.email,
     this.password,
-    this.date,
+    this.created_at,
   });
 
   String customerId;
@@ -23,23 +23,31 @@ class Customer {
   String phno;
   String email;
   String password;
-  DateTime date;
+  DateTime created_at;
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-    customerId: json["customer_id"],
-    customerName: json["customer_name"],
-    phno: json["phno"],
-    email: json["email"],
-    password: json["password"],
-    date: DateTime.parse(json["date"]),
-  );
+        customerId: json["customer_id"],
+        customerName: json["customer_name"],
+        phno: json["phno"],
+        email: json["email"],
+        password: json["password"],
+        created_at: DateTime.parse(json["date"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "customer_id": customerId,
-    "customer_name": customerName,
-    "phno": phno,
-    "email": email,
-    "password": password,
-    "date": date.toIso8601String(),
-  };
+        "customer_id": customerId,
+        "customer_name": customerName,
+        "phno": phno,
+        "email": email,
+        "password": password,
+        "date": created_at.toIso8601String(),
+      };
+}
+
+class CustomerResult {
+  int status = 0;
+  String msg;
+  Customer customer;
+
+  CustomerResult({this.status, this.msg, this.customer});
 }

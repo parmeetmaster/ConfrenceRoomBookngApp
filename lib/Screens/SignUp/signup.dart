@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/providers/sign_up_provider.dart';
 import 'package:kkconferences/widgets/custom_shape.dart';
 import 'package:kkconferences/widgets/customappbar.dart';
@@ -21,8 +22,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _medium;
 
   @override
+  void initState() {
+    final provider=Provider.of<SignUpProvider>(context,listen: false);
+    provider.skey= new GlobalKey<ScaffoldState>();
+  }
+
+  @override
   Widget build(BuildContext context) {
-final provider=Provider.of<SignUpProvider>(context).setContext(context);
+final provider=Provider.of<SignUpProvider>(context);
+provider.context=context;
+
     _height = MediaQuery.of(context).size.height;
     _width = MediaQuery.of(context).size.width;
     _pixelRatio = MediaQuery.of(context).devicePixelRatio;
@@ -30,7 +39,7 @@ final provider=Provider.of<SignUpProvider>(context).setContext(context);
     _medium =  ResponsiveWidget.isScreenMedium(_width, _pixelRatio);
 
     return Scaffold(
-      key: Provider.of<SignUpProvider>(context).scaffoldkey_signup,
+      key: provider.skey,
       body: Container(
         height: _height,
         width: _width,
@@ -65,7 +74,7 @@ final provider=Provider.of<SignUpProvider>(context).setContext(context);
               height: _large? _height/8 : (_medium? _height/7 : _height/6.5),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.orange[200], Colors.pinkAccent],
+                  colors: color_grid,
                 ),
               ),
             ),
@@ -79,7 +88,7 @@ final provider=Provider.of<SignUpProvider>(context).setContext(context);
               height: _large? _height/12 : (_medium? _height/11 : _height/10),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.orange[200], Colors.pinkAccent],
+                  colors: color_grid,
                 ),
               ),
             ),
@@ -226,12 +235,7 @@ final provider=Provider.of<SignUpProvider>(context).setContext(context);
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: (){
-        FutureBuilder<void>(
-        future: Provider.of<SignUpProvider>(context,listen: false).addNewUser(),
-        builder: (context, snapshot){
-         print('In Builder');
-        }
-        );
+        Provider.of<SignUpProvider>(context,listen: false).createUser();
     },
       textColor: Colors.white,
       padding: EdgeInsets.all(0.0),
@@ -242,7 +246,7 @@ final provider=Provider.of<SignUpProvider>(context).setContext(context);
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
           gradient: LinearGradient(
-            colors: <Color>[Colors.orange[200], Colors.pinkAccent],
+            colors: color_grid,
           ),
         ),
         padding: const EdgeInsets.all(12.0),

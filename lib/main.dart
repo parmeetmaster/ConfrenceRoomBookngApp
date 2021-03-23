@@ -1,12 +1,20 @@
-import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:kkconferences/api/FirbaseApi.dart';
+import 'package:kkconferences/Screens/SignInScreen/signin.dart';
+import 'package:kkconferences/providers/home_screen_provider.dart';
+import 'package:kkconferences/providers/sign_in_provider.dart';
+import 'package:kkconferences/utils/preference.dart';
 import 'package:provider/provider.dart';
 
+
+import 'Screens/HomeDetail/hotel_detail_page.dart';
+import 'Screens/SignUp/signup.dart';
+
+import 'Screens/HomeScreen/home_screen.dart';
+import 'Screens/splash_screen.dart';
 import 'global/constants.dart';
 import 'model/customer.dart';
 import 'providers/sign_up_provider.dart';
@@ -14,20 +22,17 @@ import 'providers/sign_up_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Preference.load();
 
-
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (ctx) => SignUpProvider())
-  ],
-      child:MyApp()
-  ),
-
+  runApp(
+    MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (ctx) => SignUpProvider()),
+          ChangeNotifierProvider(create: (ctx) => SignInProvider()),
+          ChangeNotifierProvider(create: (ctx) => HomeScreenProvider()),
+        ],
+        child: MyApp()),
   );
-
-
-
-
-
 }
 
 class MyApp extends StatelessWidget {
@@ -44,49 +49,16 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: SplashScreen(title: 'Flutter Demo Home Page'),
+      initialRoute: SplashScreen.classname,
+      routes: {
+        SplashScreen.classname:(context)=>SplashScreen(),
+        HomePage.classname:(context)=>HomePage(),
+        SignUpScreen.classname:(context) =>SignUpScreen(),
+        SignInPage.classname:(context) =>SignInPage(),
+        HotelDetailPage.classname:(context) =>HotelDetailPage(),
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    super.initState();
-    Timer(Duration(seconds: 3), () {
-      run();
-    });
-  }
-
-  run() async {
-   FireBaseApi().checkUserExist(Customer(email: "abc@gmail.com"));
-
-
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        //    color: main_color,
-        color: Colors.white,
-        child: Image.asset('assets/logo.png'));
-  }
-}
