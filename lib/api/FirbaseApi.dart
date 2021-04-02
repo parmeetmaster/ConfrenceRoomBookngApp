@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kkconferences/global/Global.dart';
+import 'package:kkconferences/model/TimeSlots.dart';
 import 'package:kkconferences/model/customer.dart';
 import 'package:uuid/uuid.dart';
 
@@ -82,5 +83,42 @@ class FireBaseApi {
       return CustomerResult(status: 0,msg: "User not found");
 
     }
+  }
+
+  /*----------------------------------Time Slot Enteries----------------------------------------------------*/
+  addTimeSlotEntry({TimeSlot timeSlot}) async {
+    bool user_flag_slot = await checkTimeSlotExist(timeSlot);
+    if (user_flag_slot == true) {
+      return CustomerResult(status: 0, msg: "User Already Exist");
+    }
+    FirebaseFirestore.instance
+        .collection("TimeSlot")
+        .add(timeSlot.toJson())
+        .then((value) {});
+    return TimeSlotResult(status: 1, msg: "Slot Created successfully");
+  }
+
+  Future<bool> checkTimeSlotExist(TimeSlot timeSlot) async {
+    var snapshot = await getTimeSlot(timeSlot);
+    print("size of data is : ${snapshot.size}");
+    if (snapshot != null) {
+      if (snapshot.size > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Future<QuerySnapshot> getTimeSlot(TimeSlot timeSlot) async {
+    return await FirebaseFirestore.instance
+        .collection("TimeSlot")
+        .where("email", isEqualTo:timeSlot.bookingDate)
+        .get()
+        .then((value) {
+      return value;
+    });
   }
 }

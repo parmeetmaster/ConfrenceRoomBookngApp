@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:kkconferences/Screens/BookingScreen/booking_screen.dart';
 import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/model/confress_model.dart';
 import 'package:kkconferences/widgets/hotel_price_text.dart';
@@ -49,9 +50,12 @@ class _HotelInformationTabState extends State<HotelInformationTab> {
               ),
             ),
             Spacer(),
-            BuyNow(
-              title: 'Book Now',
-              color: main_color,
+            InkWell(
+              onTap: ()=>Navigator.pushNamed(context, BookingScreen.classname),
+              child: BuyNow(
+                title: 'Book Now',
+                color: main_color,
+              ),
             )
           ],
         ),

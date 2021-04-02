@@ -4,12 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kkconferences/Screens/SignInScreen/signin.dart';
+import 'package:kkconferences/providers/booking_screen_provider.dart';
 import 'package:kkconferences/providers/home_screen_provider.dart';
 import 'package:kkconferences/providers/sign_in_provider.dart';
 import 'package:kkconferences/utils/preference.dart';
 import 'package:provider/provider.dart';
 
 
+import 'Screens/BookingScreen/booking_screen.dart';
 import 'Screens/HomeDetail/hotel_detail_page.dart';
 import 'Screens/SignUp/signup.dart';
 
@@ -30,6 +32,7 @@ void main() async {
           ChangeNotifierProvider(create: (ctx) => SignUpProvider()),
           ChangeNotifierProvider(create: (ctx) => SignInProvider()),
           ChangeNotifierProvider(create: (ctx) => HomeScreenProvider()),
+          ChangeNotifierProvider(create: (ctx) => BookingScreenProvider()),
         ],
         child: MyApp()),
   );
@@ -57,6 +60,7 @@ class MyApp extends StatelessWidget {
         SignUpScreen.classname:(context) =>SignUpScreen(),
         SignInPage.classname:(context) =>SignInPage(),
         HotelDetailPage.classname:(context) =>HotelDetailPage(),
+        BookingScreen.classname:(context)=>BookingScreen()
       },
     );
   }
