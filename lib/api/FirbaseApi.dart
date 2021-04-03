@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kkconferences/global/Global.dart';
-import 'package:kkconferences/model/TimeSlots.dart';
+import 'package:kkconferences/model/booking_model.dart';
 import 'package:kkconferences/model/customer.dart';
 import 'package:uuid/uuid.dart';
 
@@ -31,17 +31,6 @@ class FireBaseApi {
     return CustomerResult(status: 1, msg: "User Created successfully");
   }
 
-/*  getByDate(){
-    FirebaseFirestore.instance.collection("Customers")
-        .where("date", isLessThanOrEqualTo: DateTime.now().toIso8601String())
-        .get().then((value) {
-      value.docs.forEach((result) {
-        print("data is here ${result.data()}");
-      });
-
-    });
-
-  }*/
 
   Future<QuerySnapshot> getCustomer(Customer customer) async {
     return await FirebaseFirestore.instance
@@ -86,19 +75,31 @@ class FireBaseApi {
   }
 
   /*----------------------------------Time Slot Enteries----------------------------------------------------*/
-  addTimeSlotEntry({TimeSlot timeSlot}) async {
-    bool user_flag_slot = await checkTimeSlotExist(timeSlot);
-    if (user_flag_slot == true) {
-      return CustomerResult(status: 0, msg: "User Already Exist");
-    }
+  addBookingEntery({BookingModel model}) async {
+    var uuid = Uuid();
+    model.bookingId= uuid.v4();
     FirebaseFirestore.instance
         .collection("Bookings")
-        .add(timeSlot.toJson())
+        .add(model.toJson())
         .then((value) {});
-    return TimeSlotResult(status: 1, msg: "Slot Created successfully");
   }
 
-  Future<bool> checkTimeSlotExist(TimeSlot timeSlot) async {
+
+  Future<QuerySnapshot> getSelectedDateBookings({BookingModel model}) async {
+
+    return await FirebaseFirestore.instance
+        .collection("Bookings")
+        .where("bookingDate", isEqualTo: model.bookingDate)
+        .get()
+        .then((value) {
+      return value;
+    });
+  }
+
+
+
+
+/*  Future<bool> checkTimeSlotExist(TimeSlot timeSlot) async {
     var snapshot = await getTimeSlot(timeSlot);
     print("size of data is : ${snapshot.size}");
     if (snapshot != null) {
@@ -120,5 +121,5 @@ class FireBaseApi {
         .then((value) {
       return value;
     });
-  }
+  }*/
 }

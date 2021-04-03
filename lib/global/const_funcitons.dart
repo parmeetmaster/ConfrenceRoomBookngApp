@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 bool shouldButtonEnabled = true;
@@ -46,4 +47,10 @@ String minuteText="";
   }
 
   return " $hour:$minuteText $timeType";
+}
+
+String getFirebaseFormatDate(DateTime date){
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  return formatter.format(date);
+
 }

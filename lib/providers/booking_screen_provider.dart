@@ -1,12 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:kkconferences/Screens/BookingScreen/booking_helper.dart';
 import 'package:kkconferences/api/FirbaseApi.dart';
 import 'package:kkconferences/global/const_funcitons.dart';
 import 'package:kkconferences/global/constants.dart';
-import 'package:kkconferences/model/TimeSlots.dart';
+import 'package:kkconferences/model/booking_model.dart';
 import 'package:kkconferences/utils/popUps.dart';
 import 'package:kkconferences/widgets/chip.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -28,14 +30,19 @@ class BookingScreenProvider extends ChangeNotifier {
   TimeOfDay endTime;
   BuildContext context;
 
-  setDate(DateTime date) {
+  setDate(DateTime date) async {
     this.meeting_date = date;
 
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     curruntDateController.text = formatter.format(date);
 
-    /*    FireBaseApi().addTimeSlotEntry(timeSlot: TimeSlot(
-        bookingDate: date, bokingBinary: "00100010111110101"));*/
+    QuerySnapshot snapshot = await BookingHelper().getBookings(date);
+
+
+/*
+    print(snapshot.docs.first["bookingUserId"]);
+    print(snapshot.docs.last["bookingUserId"]);
+*/
   }
 
   void setStartTime(TimeOfDay picked) {
@@ -61,7 +68,7 @@ class BookingScreenProvider extends ChangeNotifier {
     print("${duration.inHours} mins ${twoDigitMinutes} ");
   }
 
-  void calculateBookingAmount() {
+  void calculateBookingAmount() async {
     if (meeting_date == null) {
       toast(key, "Date not Selected");
       return;
@@ -101,14 +108,15 @@ class BookingScreenProvider extends ChangeNotifier {
         showCloseIcon: true,
         closeIcon: Icon(Icons.close_fullscreen_outlined),
         title: 'Confirm Booking',
-        desc:
-        'Do you Agreed to Confirm Booking for $hourDifference hour',
+        desc: 'Do you Agreed to Confirm Booking for $hourDifference hour',
         btnOkText: "Confirm",
         btnCancelText: "Cancel",
-        btnCancelOnPress: () {
-          },
-        btnOkOnPress: () {
-          openCheckout(totalAmount*100,"Amount paid for $hourDifference hrs meeting");
+        btnCancelOnPress: () {},
+        btnOkOnPress: () async {
+       await BookingHelper().checkIsBookingExist(endTime: endTime,startTime: startTime,date: meeting_date);
+
+    /*      openCheckout(
+              totalAmount * 100, "Amount paid for $hourDifference hrs meeting");*/
         })
       ..show();
     print("amount paid is ${totalAmount}");
@@ -128,7 +136,7 @@ class BookingScreenProvider extends ChangeNotifier {
       'amount': amount,
       'name': '$company_name',
       'description': '$description',
-      'prefill': {'contact':' $phno', 'email': '$email'},
+      'prefill': {'contact': ' $phno', 'email': '$email'},
       'external': {
         'wallets': ['paytm']
       }
@@ -147,7 +155,8 @@ class BookingScreenProvider extends ChangeNotifier {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print("code is ${response.code.toString()} response${response.message.toString()}");
+    print(
+        "code is ${response.code.toString()} response${response.message.toString()}");
     Fluttertoast.showToast(
         msg: "ERROR: " + response.code.toString() + " - " + response.message,
         timeInSecForIosWeb: 4);
