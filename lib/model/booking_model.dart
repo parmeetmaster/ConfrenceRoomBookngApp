@@ -18,9 +18,9 @@ class BookingModel {
 
   String bookingDate;
   DateTime bookingStartTime;
-  double bookingStartduration;
+  int bookingStartduration;
   DateTime bookingEndTime;
-  double bookingEndduration;
+  int bookingEndduration;
   String bookingId;
   String bookingUserId;
   bool bookingStatus;
@@ -32,9 +32,9 @@ class BookingModel {
   factory BookingModel.fromJson(Map<String, dynamic> json) => BookingModel(
     bookingDate: json["bookingDate"],
     bookingStartTime: DateTime.parse(json["bookingStartTime"]),
-    bookingStartduration: json["bookingStartduration"].toDouble(),
+    bookingStartduration: json["bookingStartduration"],
     bookingEndTime: DateTime.parse(json["bookingEndTime"]),
-    bookingEndduration: json["bookingEndduration"].toDouble(),
+    bookingEndduration: json["bookingEndduration"],
     bookingId: json["bookingId"],
     bookingUserId: json["bookingUserId"],
     bookingStatus: json["bookingStatus"],

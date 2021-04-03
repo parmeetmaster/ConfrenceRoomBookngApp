@@ -58,15 +58,6 @@ class BookingScreenProvider extends ChangeNotifier {
     endTimeController.text = getFormattedTime(picked);
   }
 
-  void convertSecondsToTime(double seconds) {
-    Duration duration = Duration(seconds: 48092);
-
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    // return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
-    print("${duration.inHours} mins ${twoDigitMinutes} ");
-  }
 
   void calculateBookingAmount() async {
     if (meeting_date == null) {
@@ -111,9 +102,14 @@ class BookingScreenProvider extends ChangeNotifier {
         desc: 'Do you Agreed to Confirm Booking for $hourDifference hour',
         btnOkText: "Confirm",
         btnCancelText: "Cancel",
-        btnCancelOnPress: () {},
+        btnCancelOnPress: () async {
+          await BookingHelper().convertSecondsToTime(75600);
+          
+        },
         btnOkOnPress: () async {
-       await BookingHelper().checkIsBookingExist(endTime: endTime,startTime: startTime,date: meeting_date);
+          await BookingHelper().addBooking(endTime: endTime,startTime: startTime,date: meeting_date);
+
+     //  await BookingHelper().checkIsBookingExist(endTime: endTime,startTime: startTime,date: meeting_date);
 
     /*      openCheckout(
               totalAmount * 100, "Amount paid for $hourDifference hrs meeting");*/

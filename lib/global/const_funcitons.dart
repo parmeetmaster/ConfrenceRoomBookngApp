@@ -54,3 +54,9 @@ String getFirebaseFormatDate(DateTime date){
   return formatter.format(date);
 
 }
+
+getDatewithTime(DateTime date,TimeOfDay time ){
+  return DateTime(date.year,date.month,date.day,time.hour,time.minute);
+
+
+}

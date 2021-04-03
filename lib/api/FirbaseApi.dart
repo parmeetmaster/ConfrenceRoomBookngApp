@@ -76,8 +76,8 @@ class FireBaseApi {
 
   /*----------------------------------Time Slot Enteries----------------------------------------------------*/
   addBookingEntery({BookingModel model}) async {
-    var uuid = Uuid();
-    model.bookingId= uuid.v4();
+ /*   var uuid = Uuid();
+    model.bookingId= uuid.v4();*/
     FirebaseFirestore.instance
         .collection("Bookings")
         .add(model.toJson())
