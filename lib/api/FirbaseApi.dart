@@ -92,7 +92,7 @@ class FireBaseApi {
       return CustomerResult(status: 0, msg: "User Already Exist");
     }
     FirebaseFirestore.instance
-        .collection("TimeSlot")
+        .collection("Bookings")
         .add(timeSlot.toJson())
         .then((value) {});
     return TimeSlotResult(status: 1, msg: "Slot Created successfully");

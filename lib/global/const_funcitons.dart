@@ -25,3 +25,25 @@ checkButtonEnable() {
   return shouldButtonEnabled;
 }
 
+String getFormattedTime(TimeOfDay picked) {
+  String timeType = "";
+  int hour;
+  if (picked.hour > 12) {
+    timeType = "PM";
+  } else {
+    timeType = "AM";
+  }
+  if (picked.hour > 12) {
+    hour = picked.hour - 12;
+  }else{
+    hour = picked.hour;
+  }
+String minuteText="";
+  if(picked.minute<10){
+ minuteText=   "0${picked.minute}";
+}else{
+    minuteText=   "${picked.minute}";
+  }
+
+  return " $hour:$minuteText $timeType";
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/providers/booking_screen_provider.dart';
+import 'package:kkconferences/widgets/green_button.dart';
 import 'package:provider/provider.dart';
 
 class BookingScreen extends StatefulWidget {
@@ -11,9 +12,13 @@ class BookingScreen extends StatefulWidget {
 }
 
 class _BookingScreenState extends State<BookingScreen> {
+
   @override
   Widget build(BuildContext context) {
+    final provider= Provider.of<BookingScreenProvider>(context);
+    provider.context=context;
     return Scaffold(
+      key:provider.key,
       appBar: AppBar(
         title: Text("Book Room"),
         backgroundColor: main_color,
@@ -36,8 +41,10 @@ class _BookingScreenState extends State<BookingScreen> {
                       DateTime picked = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime(DateTime.now().year,DateTime.now().month,1),
-                        lastDate: DateTime(DateTime.now().year,DateTime.now().month+1,31),
+                        firstDate: DateTime(
+                            DateTime.now().year, DateTime.now().month, 1),
+                        lastDate: DateTime(
+                            DateTime.now().year, DateTime.now().month + 1, 31),
                       );
                       if (picked != null && picked != date) {
                         // add this line.
@@ -91,62 +98,52 @@ class _BookingScreenState extends State<BookingScreen> {
                     onTap: () async {
                       TimeOfDay time = TimeOfDay.now();
                       FocusScope.of(context).requestFocus(new FocusNode());
+
                       TimeOfDay picked = await showTimePicker(
-                          context: context, initialTime: time);
-                      if (picked != null && picked != time) {
-                        // add this line.
-                        setState(() {
-                          time = picked;
-                        });
+                          initialEntryMode: TimePickerEntryMode.dial,
+                          context: context,
+                          initialTime: time,
+                          builder: (BuildContext context, Widget child) {
+                            return MediaQuery(
+                              data: MediaQuery.of(context)
+                                  .copyWith(alwaysUse24HourFormat: false),
+                              child: child,
+                            );
+                          });
+                      if (picked != null) {
+                        value.setStartTime(picked);
                       }
+                      ;
                     },
-                    child: InkWell(
-                        onTap: () async {
-                            TimeOfDay time = TimeOfDay.now();
-                            FocusScope.of(context).requestFocus(new FocusNode());
-
-                              TimeOfDay picked = await showTimePicker(
-                                   context: context, initialTime: time);
-                              if (picked != null && picked != time) {
-        // start date
-                             Duration duration=Duration(seconds: 48092);
-
-                             String twoDigits(int n) => n.toString().padLeft(2, "0");
-                             String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-                             String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-                            // return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
-                                print("${duration.inHours} mins ${twoDigitMinutes} ");
-                                       }
-                                          },
-                      child: AbsorbPointer(
-                        child: Container(
-                          width: 150,
-                          height: 40,
-                          child: TextField(
-                            autocorrect: true,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(0),
-                              hintText: 'Start Time',
-                              hintStyle:
-                                  TextStyle(color: Colors.grey, fontSize: 15),
-                              filled: true,
-                              prefixIcon: Icon(
-                                Icons.watch_later_outlined,
-                                color: Colors.black54,
-                              ),
-                              fillColor: Colors.white70,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.black38, width: 2),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.black54, width: 2),
-                              ),
+                    child: AbsorbPointer(
+                      child: Container(
+                        width: 150,
+                        height: 40,
+                        child: TextField(
+                          controller: value.startTimeController,
+                          autocorrect: true,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(0),
+                            hintText: 'Start Time',
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 15),
+                            filled: true,
+                            prefixIcon: Icon(
+                              Icons.watch_later_outlined,
+                              color: Colors.black54,
+                            ),
+                            fillColor: Colors.white70,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12.0)),
+                              borderSide:
+                                  BorderSide(color: Colors.black38, width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide:
+                                  BorderSide(color: Colors.black54, width: 2),
                             ),
                           ),
                         ),
@@ -162,12 +159,19 @@ class _BookingScreenState extends State<BookingScreen> {
                       FocusScope.of(context).requestFocus(new FocusNode());
 
                       TimeOfDay picked = await showTimePicker(
-                          context: context, initialTime: time);
-                      if (picked != null && picked != time) {
+                          context: context, initialTime: time,
+                          builder: (BuildContext context, Widget child) {
+                            return MediaQuery(
+                              data: MediaQuery.of(context)
+                                  .copyWith(alwaysUse24HourFormat: false),
+                              child: child,
+                            );
+                          }
+
+                      );
+                      if (picked != null) {
                         // add this line.
-                        setState(() {
-                          time = picked;
-                        });
+                        value.setEndTime(picked);
                       }
                     },
                     child: AbsorbPointer(
@@ -175,6 +179,7 @@ class _BookingScreenState extends State<BookingScreen> {
                         width: 150,
                         height: 40,
                         child: TextField(
+                          controller: value.endTimeController,
                           autocorrect: true,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.all(0),
@@ -206,10 +211,24 @@ class _BookingScreenState extends State<BookingScreen> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 20,
+              ),
+              // booking button
+              InkWell(
+                onTap: () {
+                  value.calculateBookingAmount();
+                },
+                child: GreenButton(
+                  text: "Book Now",
+                  fontsize: 17,
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                ),
+              ),
               Divider(
                 thickness: 1,
               ),
-
 
 /*          TextFormField(
            // add this line.
@@ -241,5 +260,18 @@ class _BookingScreenState extends State<BookingScreen> {
         );
       }),
     );
+  }
+
+  @override
+  void initState() {
+    final provider = Provider.of<BookingScreenProvider>(context, listen: false);
+    provider.key= GlobalKey<ScaffoldState>();
+    provider.initRazorPay();
+  }
+
+  void dispose() {
+    super.dispose();
+    final provider = Provider.of<BookingScreenProvider>(context, listen: false);
+    provider.razorpay.clear();
   }
 }

@@ -47,3 +47,7 @@ class BuyNow extends StatelessWidget {
     );
   }
 }
+
+
+
+
