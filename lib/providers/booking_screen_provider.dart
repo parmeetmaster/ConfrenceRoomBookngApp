@@ -36,7 +36,7 @@ class BookingScreenProvider extends ChangeNotifier {
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     curruntDateController.text = formatter.format(date);
 
-    QuerySnapshot snapshot = await BookingHelper().getBookings(date);
+    QuerySnapshot snapshot = await BookingHelper(context).getBookings(date);
 
 
 /*
@@ -103,11 +103,11 @@ class BookingScreenProvider extends ChangeNotifier {
         btnOkText: "Confirm",
         btnCancelText: "Cancel",
         btnCancelOnPress: () async {
-          await BookingHelper().convertSecondsToTime(75600);
+          await BookingHelper(context).convertSecondsToTime(75600);
           
         },
         btnOkOnPress: () async {
-          await BookingHelper().addBooking(endTime: endTime,startTime: startTime,date: meeting_date);
+          await BookingHelper(context).addBooking(endTime: endTime,startTime: startTime,date: meeting_date);
 
      //  await BookingHelper().checkIsBookingExist(endTime: endTime,startTime: startTime,date: meeting_date);
 

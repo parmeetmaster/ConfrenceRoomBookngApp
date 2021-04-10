@@ -5,22 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:kkconferences/api/FirbaseApi.dart';
 import 'package:kkconferences/global/const_funcitons.dart';
 import 'package:kkconferences/model/booking_model.dart';
+import 'package:kkconferences/utils/dialog.dart';
 import 'package:uuid/uuid.dart';
 
-
-
-
-
-
-
 class BookingHelper {
+  BuildContext context;
+
+
+  BookingHelper(this.context);
+
   getBookings(DateTime date) async {
     QuerySnapshot snapshot = await FireBaseApi().getSelectedDateBookings(
         model: BookingModel(bookingDate: getFirebaseFormatDate(date)));
     return snapshot;
   }
 
- checkIsBookingExist(
+ Future<bool>checkIsBookingExist(
       {TimeOfDay endTime, TimeOfDay startTime, DateTime date}) async {
     print("we called");
     int cuuruntMeetingStartInDuration =
@@ -40,6 +40,7 @@ class BookingHelper {
     470000<480000 &&  480000<510000
     */
     print("clash of start time");
+    return false;
       }else  if (model.bookingStartduration < cuuruntMeetingEndInDuration &&
           cuuruntMeetingEndInDuration < model.bookingEndduration) {
         /*
@@ -50,14 +51,21 @@ class BookingHelper {
     470000<540000 &&  540000<60000
     */
         print("clash of end time");
+        return false;
       }
 
     }
+    return true;
   }
 
   addBooking({TimeOfDay endTime, TimeOfDay startTime, DateTime date})async {
-    await checkIsBookingExist(endTime: endTime, startTime: startTime, date: date);
+    bool booking_flag=await checkIsBookingExist(endTime: endTime, startTime: startTime, date: date);
+    if(booking_flag==false){
+      DialogUtil(context: context,message: "Booking aleady Exist in Time Span",title: "Error Booking Aleary Exist",);
+    }
 
+
+     startTime=TimeOfDay(hour: startTime.hour,minute: startTime.minute+1);
     var uuid = Uuid();
     FireBaseApi().addBookingEntery(
         model: BookingModel(
@@ -68,7 +76,7 @@ class BookingHelper {
           Duration(hours: startTime.hour, minutes: startTime.minute).inSeconds,
       bookingEndduration:
           Duration(hours: endTime.hour, minutes: endTime.minute).inSeconds,
-      bookingUserId: uuid.v4(),
+      bookingUserId: uuid.v4(), // todo need to use unique id during login
       bookingId: uuid.v4(),
       bookingStatus: false,
     ));
