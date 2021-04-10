@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:kkconferences/Screens/HomeScreen/home_screen.dart';
 import 'package:kkconferences/api/FirbaseApi.dart';
 import 'package:kkconferences/global/Global.dart';
 import 'package:kkconferences/global/const_funcitons.dart';
+import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/model/customer.dart';
+import 'package:kkconferences/utils/preference.dart';
 import 'package:kkconferences/utils/validation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -74,6 +79,8 @@ class SignUpProvider extends ChangeNotifier {
 
     if (res.status == 1) {
       Global.activeCustomer=customer;
+      Preference.setString(login_credentials, jsonEncode(customer));
+      Navigator.pushNamedAndRemoveUntil(context, HomePage.classname, (route) => false);
     }
   }
 }

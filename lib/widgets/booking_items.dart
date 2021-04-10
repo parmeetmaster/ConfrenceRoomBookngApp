@@ -6,6 +6,7 @@ class BookingItem extends StatelessWidget {
    String dateStr;
 
 
+   BookingItem({this.startTime, this.endTime, this.dateStr});
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +25,14 @@ class BookingItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
-                  children: [Icon(Icons.watch_later_outlined,color: Colors.green,),Text(" Start Time: 9:00 AM",overflow: TextOverflow.ellipsis,),
+                  children: [Icon(Icons.watch_later_outlined,color: Colors.green,),Text(" Start Time: ${startTime}",overflow: TextOverflow.ellipsis,),
                   Spacer(),
-                    Icon(Icons.watch_later_outlined,color: Colors.red,),Text(" End Time: 9:00 AM",overflow: TextOverflow.ellipsis,)
+                    Icon(Icons.watch_later_outlined,color: Colors.red,),Text(" End Time: ${endTime}",overflow: TextOverflow.ellipsis,)
                   ],
                 ),
                 SizedBox(height: 15,),
                 Row(
-                  children: [Icon(Icons.calendar_today_sharp,color: Colors.black54,),SizedBox(width: 5),Text("Date: 03-27-2020"),
+                  children: [Icon(Icons.calendar_today_sharp,color: Colors.black54,),SizedBox(width: 5),Text("Date:${dateStr} "),
                     Spacer(),
                   ],
                 ),

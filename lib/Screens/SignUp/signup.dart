@@ -53,7 +53,7 @@ provider.context=context;
               acceptTermsTextRow(),
               SizedBox(height: _height/35,),
               button(),
-              infoTextRow(),
+           //   infoTextRow(),
 
               //signInTextRow(),
             ],

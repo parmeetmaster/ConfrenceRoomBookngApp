@@ -29,6 +29,7 @@ class BookingScreenProvider extends ChangeNotifier {
   TimeOfDay startTime;
   TimeOfDay endTime;
   BuildContext context;
+  List<BookingModel> todayMeetings = [];
 
   setDate(DateTime date) async {
     this.meeting_date = date;
@@ -36,13 +37,8 @@ class BookingScreenProvider extends ChangeNotifier {
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     curruntDateController.text = formatter.format(date);
 
-    QuerySnapshot snapshot = await BookingHelper(context).getBookings(date);
-
-
-/*
-    print(snapshot.docs.first["bookingUserId"]);
-    print(snapshot.docs.last["bookingUserId"]);
-*/
+    showTodayMettings(date);
+    //  QuerySnapshot snapshot = await BookingHelper(context).getBookings(date);
   }
 
   void setStartTime(TimeOfDay picked) {
@@ -57,7 +53,6 @@ class BookingScreenProvider extends ChangeNotifier {
     endTime = picked;
     endTimeController.text = getFormattedTime(picked);
   }
-
 
   void calculateBookingAmount() async {
     if (meeting_date == null) {
@@ -81,7 +76,15 @@ class BookingScreenProvider extends ChangeNotifier {
     }
     int hourDifference = endTime.hour - startTime.hour;
     int minutesDifference = endTime.minute - startTime.minute;
-    if (hourDifference < 1) {
+
+    int cuuruntMeetingStartDuration =
+        Duration(hours: startTime.hour, minutes: startTime.minute).inSeconds;
+    int cuuruntMeetingEndDuration =
+        Duration(hours: endTime.hour, minutes: endTime.minute).inSeconds;
+    int meetingDuration =
+        cuuruntMeetingEndDuration - cuuruntMeetingStartDuration;
+
+    if (meetingDuration < 3500) {
       toast(key, "Meeting should be greater than 1 hour");
       return;
     }
@@ -103,64 +106,30 @@ class BookingScreenProvider extends ChangeNotifier {
         btnOkText: "Confirm",
         btnCancelText: "Cancel",
         btnCancelOnPress: () async {
-          await BookingHelper(context).convertSecondsToTime(75600);
-          
+          await BookingHelper().convertSecondsToTime(75600);
         },
         btnOkOnPress: () async {
-          await BookingHelper(context).addBooking(endTime: endTime,startTime: startTime,date: meeting_date);
+          await BookingHelper().performBooking(context,
+              endTime: endTime, startTime: startTime, date: meeting_date,amount: totalAmount);
 
-     //  await BookingHelper().checkIsBookingExist(endTime: endTime,startTime: startTime,date: meeting_date);
+          //  await BookingHelper().checkIsBookingExist(endTime: endTime,startTime: startTime,date: meeting_date);
 
-    /*      openCheckout(
+          /*      openCheckout(
               totalAmount * 100, "Amount paid for $hourDifference hrs meeting");*/
         })
       ..show();
     print("amount paid is ${totalAmount}");
   }
 
-  /*There is payment gateway code */
-  void initRazorPay() {
-    razorpay = Razorpay();
-    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-  }
 
-  void openCheckout(double amount, String description) async {
-    var options = {
-      'key': razor_key,
-      'amount': amount,
-      'name': '$company_name',
-      'description': '$description',
-      'prefill': {'contact': ' $phno', 'email': '$email'},
-      'external': {
-        'wallets': ['paytm']
-      }
-    };
-
-    try {
-      razorpay.open(options);
-    } catch (e) {
-      debugPrint(e);
+  void showTodayMettings(DateTime date) async {
+    todayMeetings = [];
+    QuerySnapshot snapshot = await BookingHelper().getBookings(date);
+    for (QueryDocumentSnapshot item in snapshot.docs) {
+      BookingModel model = BookingModel.fromJson(item.data());
+      todayMeetings.add(model);
     }
-  }
-
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(
-        msg: "SUCCESS: " + response.paymentId, timeInSecForIosWeb: 4);
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    print(
-        "code is ${response.code.toString()} response${response.message.toString()}");
-    Fluttertoast.showToast(
-        msg: "ERROR: " + response.code.toString() + " - " + response.message,
-        timeInSecForIosWeb: 4);
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(
-        msg: "EXTERNAL_WALLET: " + response.walletName, timeInSecForIosWeb: 4);
+    notifyListeners();
   }
 
 /* end There is payment gateway code */

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kkconferences/global/const_funcitons.dart';
 import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/providers/booking_screen_provider.dart';
 import 'package:kkconferences/widgets/booking_items.dart';
@@ -13,13 +14,12 @@ class BookingScreen extends StatefulWidget {
 }
 
 class _BookingScreenState extends State<BookingScreen> {
-
   @override
   Widget build(BuildContext context) {
-    final provider= Provider.of<BookingScreenProvider>(context);
-    provider.context=context;
+    final provider = Provider.of<BookingScreenProvider>(context);
+    provider.context = context;
     return Scaffold(
-      key:provider.key,
+      key: provider.key,
       appBar: AppBar(
         title: Text("Book Room"),
         backgroundColor: main_color,
@@ -39,14 +39,12 @@ class _BookingScreenState extends State<BookingScreen> {
                       onTap: () async {
                         DateTime date = DateTime.now();
                         FocusScope.of(context).requestFocus(new FocusNode());
-
                         DateTime picked = await showDatePicker(
                           context: context,
+                          firstDate: DateTime.now().subtract(Duration(days: 0)),
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(
-                              DateTime.now().year, DateTime.now().month, 1),
-                          lastDate: DateTime(
-                              DateTime.now().year, DateTime.now().month + 1, 31),
+                          lastDate: DateTime(DateTime.now().year,
+                              DateTime.now().month + 1, 31),
                         );
                         if (picked != null && picked != date) {
                           // add this line.
@@ -161,16 +159,15 @@ class _BookingScreenState extends State<BookingScreen> {
                         FocusScope.of(context).requestFocus(new FocusNode());
 
                         TimeOfDay picked = await showTimePicker(
-                            context: context, initialTime: time,
+                            context: context,
+                            initialTime: time,
                             builder: (BuildContext context, Widget child) {
                               return MediaQuery(
                                 data: MediaQuery.of(context)
                                     .copyWith(alwaysUse24HourFormat: false),
                                 child: child,
                               );
-                            }
-
-                        );
+                            });
                         if (picked != null) {
                           // add this line.
                           value.setEndTime(picked);
@@ -232,28 +229,35 @@ class _BookingScreenState extends State<BookingScreen> {
                   thickness: 1,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 10,top:10),
+                  padding: EdgeInsets.only(left: 10, top: 10),
                   child: Align(
                       alignment: Alignment.topLeft,
-                      child: Text("Booking on Same Day",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),)),
+                      child: Text(
+                        "Booking on Same Day",
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.bold),
+                      )),
                 ),
               ],
             ),
             Container(
-              padding: EdgeInsets.only(top:250),
+              padding: EdgeInsets.only(top: 250),
               child: Expanded(
                 child: ListView.builder(
-                  itemCount: 10,
+                  itemCount: value.todayMeetings.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: BookingItem(),
+                      title: BookingItem(
+                        endTime: getDateWith12HrsFormat(value.todayMeetings[index].bookingEndTime),
+                        startTime:
+                        getDateWith12HrsFormat(value.todayMeetings[index].bookingStartTime),
+                        dateStr: value.todayMeetings[index].bookingDate,
+                      ),
                     );
                   },
                 ),
               ),
             )
-
-
           ],
         );
       }),
@@ -263,8 +267,8 @@ class _BookingScreenState extends State<BookingScreen> {
   @override
   void initState() {
     final provider = Provider.of<BookingScreenProvider>(context, listen: false);
-    provider.key= GlobalKey<ScaffoldState>();
-    provider.initRazorPay();
+    provider.key = GlobalKey<ScaffoldState>();
+
   }
 
   void dispose() {
