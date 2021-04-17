@@ -9,6 +9,7 @@ import 'package:kkconferences/api/FirbaseApi.dart';
 import 'package:kkconferences/global/const_funcitons.dart';
 import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/model/booking_model.dart';
+import 'package:kkconferences/model/carrage_model.dart';
 import 'package:kkconferences/utils/popUps.dart';
 import 'package:kkconferences/widgets/chip.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -31,13 +32,15 @@ class BookingScreenProvider extends ChangeNotifier {
   BuildContext context;
   List<BookingModel> todayMeetings = [];
 
+  Carrage carrage;
+
   setDate(DateTime date) async {
     this.meeting_date = date;
 
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     curruntDateController.text = formatter.format(date);
 
-    showTodayMettings(date);
+    showTodayMettings(date,carrage);
     //  QuerySnapshot snapshot = await BookingHelper(context).getBookings(date);
   }
 
@@ -110,7 +113,7 @@ class BookingScreenProvider extends ChangeNotifier {
         },
         btnOkOnPress: () async {
           await BookingHelper().performBooking(context,
-              endTime: endTime, startTime: startTime, date: meeting_date,amount: totalAmount);
+              endTime: endTime, startTime: startTime, date: meeting_date,amount: totalAmount,carrage: carrage);
 
           //  await BookingHelper().checkIsBookingExist(endTime: endTime,startTime: startTime,date: meeting_date);
 
@@ -122,9 +125,9 @@ class BookingScreenProvider extends ChangeNotifier {
   }
 
 
-  void showTodayMettings(DateTime date) async {
+  void showTodayMettings(DateTime date,Carrage carrage) async {
     todayMeetings = [];
-    QuerySnapshot snapshot = await BookingHelper().getBookings(date);
+    QuerySnapshot snapshot = await BookingHelper().getBookings(date,carrage);
     for (QueryDocumentSnapshot item in snapshot.docs) {
       BookingModel model = BookingModel.fromJson(item.data());
       todayMeetings.add(model);

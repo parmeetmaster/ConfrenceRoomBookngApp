@@ -8,6 +8,7 @@ import 'package:kkconferences/global/Global.dart';
 import 'package:kkconferences/global/const_funcitons.dart';
 import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/model/booking_model.dart';
+import 'package:kkconferences/model/carrage_model.dart';
 import 'package:kkconferences/utils/dialog.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -16,13 +17,15 @@ class BookingHelper {
   BuildContext context;
   BookingModel errorModel;
   Razorpay razorpay;
+  Carrage carrage;
+  getBookings(DateTime date,Carrage carrage) async {
 
-  getBookings(DateTime date) async {
     QuerySnapshot snapshot = await FireBaseApi().getSelectedDateBookings(
-        model: BookingModel(bookingDate: getFirebaseFormatDate(date)));
+        model: BookingModel(bookingDate: getFirebaseFormatDate(date),roomno: carrage.confressModel.roomNo));
     return snapshot;
   }
 
+  //2
   Future<bool> checkIsBookingExist(
       {TimeOfDay endTime, TimeOfDay startTime, DateTime date}) async {
     print("we called");
@@ -30,11 +33,11 @@ class BookingHelper {
         Duration(hours: startTime.hour, minutes: startTime.minute).inSeconds;
     int cuuruntMeetingEndInDuration =
         Duration(hours: endTime.hour, minutes: endTime.minute).inSeconds;
-    QuerySnapshot snapshot = await getBookings(date);
+    QuerySnapshot snapshot = await getBookings(date,carrage);
     for (QueryDocumentSnapshot item in snapshot.docs) {
       BookingModel model = BookingModel.fromJson(item.data());
-      if (cuuruntMeetingStartInDuration <= model.bookingStartduration &&
-          cuuruntMeetingStartInDuration >= model.bookingEndduration) {
+      if (cuuruntMeetingStartInDuration<model.bookingStartduration
+          && model.bookingStartduration<cuuruntMeetingEndInDuration) {
         /*
     booking start duration is 47000
     selected start duration is 48000
@@ -45,8 +48,8 @@ class BookingHelper {
         errorModel = model;
         print("clash of scenerio 1");
         return false;
-      } else if (model.bookingStartduration <= cuuruntMeetingEndInDuration &&
-          cuuruntMeetingEndInDuration <= model.bookingEndduration) {
+      } else if (cuuruntMeetingStartInDuration<model.bookingEndduration
+          && model.bookingEndduration<cuuruntMeetingEndInDuration) {
         /*
     booking start duration is 47000
      booking end duration 60000
@@ -57,12 +60,17 @@ class BookingHelper {
         errorModel = model;
         print("clash of scenerio 2");
         return false;
-      } else if (cuuruntMeetingStartInDuration < model.bookingStartduration &&
-          cuuruntMeetingEndInDuration < model.bookingEndduration) {
+      } else if (
+      (cuuruntMeetingStartInDuration>model.bookingStartduration && cuuruntMeetingStartInDuration<model.bookingEndduration )
+      && ( cuuruntMeetingStartInDuration<model.bookingEndduration && cuuruntMeetingEndInDuration<model.bookingEndduration )) {
         print("clash of scenerio 3");
+        errorModel = model;
+        return false;
       } else if (cuuruntMeetingStartInDuration > model.bookingStartduration &&
           cuuruntMeetingEndInDuration < model.bookingEndduration) {
         print("clash of scenerio 4");
+        errorModel = model;
+        return false;
       }
     }
     return true;
@@ -73,15 +81,18 @@ class BookingHelper {
   DateTime date;
   double amount;
 
+  // 1
   performBooking(BuildContext context,
       { endTime,
       TimeOfDay startTime,
       DateTime date,
-      double amount}) async {
+      double amount,Carrage carrage}) async {
 
+    this.carrage=carrage;
 
     bool booking_flag = await checkIsBookingExist(
-        endTime: endTime, startTime: startTime, date: date);
+        endTime: endTime, startTime: startTime, date: date );
+    // 3
     if (booking_flag == false) {
       DialogUtil(
         context: context,
@@ -121,7 +132,7 @@ class BookingHelper {
   void openCheckout(double amount, String description) async {
     var options = {
       'key': razor_key,
-      'amount': amount*100,
+      'amount': carrage.confressModel.price*100, // price show here
       'name': '$company_name',
       'description': '$description',
       'prefill': {'contact': ' $phno', 'email': '$email'},
@@ -153,6 +164,7 @@ class BookingHelper {
           bookingEndduration:
           Duration(hours: endTime.hour, minutes: endTime.minute).inSeconds,
           bookingUserId: Global.activeCustomer.customerId,
+          roomno: carrage.confressModel.roomNo,
           // todo need to use unique id during login
           bookingId: uuid.v4(),
           bookingStatus: false,

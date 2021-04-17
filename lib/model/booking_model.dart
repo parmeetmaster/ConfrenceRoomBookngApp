@@ -32,7 +32,7 @@ class BookingModel {
   bool iscancel;
   String amount;
   Timestamp createdon;
-  int roomno;
+  String roomno;
 
   factory BookingModel.fromRawJson(String str) =>
       BookingModel.fromJson(json.decode(str));

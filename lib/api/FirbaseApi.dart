@@ -76,7 +76,7 @@ class FireBaseApi {
     }
   }
 
-  /*----------------------------------Time Slot Enteries----------------------------------------------------*/
+  /*----------------------------------booking Time Slot Enteries----------------------------------------------------*/
   addBookingEntery({BookingModel model}) async {
     /*   var uuid = Uuid();
     model.bookingId= uuid.v4();*/

@@ -18,6 +18,7 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget build(BuildContext context) {
     final provider = Provider.of<BookingScreenProvider>(context);
     provider.context = context;
+    provider.carrage=ModalRoute.of(context).settings.arguments;
     return Scaffold(
       key: provider.key,
       appBar: AppBar(
