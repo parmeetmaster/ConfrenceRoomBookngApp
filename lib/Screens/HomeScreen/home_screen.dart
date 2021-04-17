@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:kkconferences/global/Global.dart';
 
 import 'package:kkconferences/providers/home_screen_provider.dart';
+import 'package:kkconferences/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 
 import 'hotel_item.dart';
@@ -11,6 +13,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child:  BookingScreenDrawer(username: Global.activeCustomer.customerName,
+      email:  Global.activeCustomer.email,)  ,
+      ),
       appBar: AppBar(),
       body: HomeListBody(),
     );

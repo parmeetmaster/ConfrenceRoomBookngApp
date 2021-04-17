@@ -31,7 +31,6 @@ class FireBaseApi {
     return CustomerResult(status: 1, msg: "User Created successfully");
   }
 
-
   Future<QuerySnapshot> getCustomer(Customer customer) async {
     return await FirebaseFirestore.instance
         .collection("Customers")
@@ -62,21 +61,24 @@ class FireBaseApi {
     try {
       QueryDocumentSnapshot result = snapshot.docs.first;
       if (result.exists) {
-        if(customer.password==result.get("password") && customer.email==result.get("email")){
-          return CustomerResult(status: 1,msg: "Login Successfull",customer: Customer.fromJson(result.data()));
-        }else{
-          return    CustomerResult(status: 0,msg: "User not found");
+        if (customer.password == result.get("password") &&
+            customer.email == result.get("email")) {
+          return CustomerResult(
+              status: 1,
+              msg: "Login Successfull",
+              customer: Customer.fromJson(result.data()));
+        } else {
+          return CustomerResult(status: 0, msg: "User not found");
         }
       }
     } catch (e) {
-      return CustomerResult(status: 0,msg: "User not found");
-
+      return CustomerResult(status: 0, msg: "User not found");
     }
   }
 
   /*----------------------------------Time Slot Enteries----------------------------------------------------*/
   addBookingEntery({BookingModel model}) async {
- /*   var uuid = Uuid();
+    /*   var uuid = Uuid();
     model.bookingId= uuid.v4();*/
     FirebaseFirestore.instance
         .collection("Bookings")
@@ -84,9 +86,7 @@ class FireBaseApi {
         .then((value) {});
   }
 
-
   Future<QuerySnapshot> getSelectedDateBookings({BookingModel model}) async {
-
     return await FirebaseFirestore.instance
         .collection("Bookings")
         .where("bookingDate", isEqualTo: model.bookingDate)
@@ -96,8 +96,15 @@ class FireBaseApi {
     });
   }
 
-
-
+  Future<QuerySnapshot> getMyBookings(Customer customer) async {
+    return await FirebaseFirestore.instance
+        .collection("Bookings")
+        .where("bookingUserId", isEqualTo: customer.customerId)
+        .get()
+        .then((value) {
+      return value;
+    });
+  }
 
 /*  Future<bool> checkTimeSlotExist(TimeSlot timeSlot) async {
     var snapshot = await getTimeSlot(timeSlot);

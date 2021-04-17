@@ -94,7 +94,7 @@ class BookingHelper {
     this.endTime=endTime;
     this.startTime=startTime;
     this.date=date;
-    this.amount;
+    this.amount=amount;
 
    await initRazorPay();
    openCheckout(amount, "Booking for ${getFormattedTime(startTime)} to ${getFormattedTime(endTime)} on ${getFirebaseFormatDate(date)}");
@@ -156,6 +156,8 @@ class BookingHelper {
           // todo need to use unique id during login
           bookingId: uuid.v4(),
           bookingStatus: false,
+          amount: amount.toString(),
+          createdon: Timestamp.now()
         ));
 
 
