@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kkconferences/global/Global.dart';
+import 'package:kkconferences/global/const_funcitons.dart';
 import 'package:kkconferences/model/booking_model.dart';
 import 'package:kkconferences/model/customer.dart';
 import 'package:uuid/uuid.dart';
@@ -80,6 +81,7 @@ class FireBaseApi {
   addBookingEntery({BookingModel model}) async {
     /*   var uuid = Uuid();
     model.bookingId= uuid.v4();*/
+    model.createdon=getBookingRegistrationNumberUsingTime();
     FirebaseFirestore.instance
         .collection("Bookings")
         .add(model.toJson())
@@ -89,7 +91,7 @@ class FireBaseApi {
   Future<QuerySnapshot> getSelectedDateBookings({BookingModel model}) async {
     return await FirebaseFirestore.instance
         .collection("Bookings")
-        .where("bookingDate", isEqualTo: model.bookingDate)
+        .where("bookingDate", isEqualTo: model.bookingDate) .where("roomno", isEqualTo: model.roomno)
         .get()
         .then((value) {
       return value;
@@ -100,33 +102,12 @@ class FireBaseApi {
     return await FirebaseFirestore.instance
         .collection("Bookings")
         .where("bookingUserId", isEqualTo: customer.customerId)
+        .orderBy("bookingId",descending: false)
+        .orderBy("createdon",descending: true)
         .get()
         .then((value) {
       return value;
     });
   }
 
-/*  Future<bool> checkTimeSlotExist(TimeSlot timeSlot) async {
-    var snapshot = await getTimeSlot(timeSlot);
-    print("size of data is : ${snapshot.size}");
-    if (snapshot != null) {
-      if (snapshot.size > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return null;
-    }
-  }
-
-  Future<QuerySnapshot> getTimeSlot(TimeSlot timeSlot) async {
-    return await FirebaseFirestore.instance
-        .collection("TimeSlot")
-        .where("email", isEqualTo:timeSlot.bookingDate)
-        .get()
-        .then((value) {
-      return value;
-    });
-  }*/
 }

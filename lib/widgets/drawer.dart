@@ -3,8 +3,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:kkconferences/Screens/my_bookings/my_bookings.dart';
 import 'package:kkconferences/api/FirbaseApi.dart';
 import 'package:kkconferences/global/Global.dart';
+import 'package:kkconferences/widgets/active_booking_items.dart';
 
 class BookingScreenDrawer extends StatefulWidget {
   String username;
@@ -38,13 +40,7 @@ class _BookingScreenDrawerState extends State<BookingScreenDrawer> {
         ),
         ListTile(
           onTap: () async{
-       QuerySnapshot shot=await  FireBaseApi().   getMyBookings(Global.activeCustomer);
-
-       print("size of data is ${shot.docs.length}");
-           for(QueryDocumentSnapshot item in shot.docs){
-             print(item.data());
-           }
-
+      Navigator.pushNamed(context, MyBookings.classname);
 
        },
 

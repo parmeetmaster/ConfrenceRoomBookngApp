@@ -62,3 +62,8 @@ getDatewithTime(DateTime date,TimeOfDay time ){
 getDateWith12HrsFormat(DateTime date){
   return DateFormat("h:mm a").format(date);
 }
+
+getBookingRegistrationNumberUsingTime(){
+  return DateTime.now().millisecondsSinceEpoch;
+}
+

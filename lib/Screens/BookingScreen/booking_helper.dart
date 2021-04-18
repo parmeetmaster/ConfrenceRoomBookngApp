@@ -38,25 +38,13 @@ class BookingHelper {
       BookingModel model = BookingModel.fromJson(item.data());
       if (cuuruntMeetingStartInDuration<model.bookingStartduration
           && model.bookingStartduration<cuuruntMeetingEndInDuration) {
-        /*
-    booking start duration is 47000
-    selected start duration is 48000
-    booking end duration 51000
-    selected end duration 540000
-    470000<480000 &&  480000<510000
-    */
+
         errorModel = model;
         print("clash of scenerio 1");
         return false;
       } else if (cuuruntMeetingStartInDuration<model.bookingEndduration
           && model.bookingEndduration<cuuruntMeetingEndInDuration) {
-        /*
-    booking start duration is 47000
-     booking end duration 60000
-    selected start duration is 48000
-    selected end duration 540000
-    470000<540000 &&  540000<60000
-    */
+
         errorModel = model;
         print("clash of scenerio 2");
         return false;
@@ -113,7 +101,6 @@ class BookingHelper {
 
   void convertSecondsToTime(int seconds) {
     Duration duration = Duration(seconds: seconds);
-
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
@@ -149,9 +136,9 @@ class BookingHelper {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    print("${response.paymentId}");
     Fluttertoast.showToast(
         msg: "SUCCESS: " + response.paymentId, timeInSecForIosWeb: 4);
-
     startTime = TimeOfDay(hour: startTime.hour, minute: startTime.minute + 1);
     var uuid = Uuid();
     FireBaseApi().addBookingEntery(
@@ -169,7 +156,6 @@ class BookingHelper {
           bookingId: uuid.v4(),
           bookingStatus: false,
           amount: amount.toString(),
-          createdon: Timestamp.now()
         ));
 
 
