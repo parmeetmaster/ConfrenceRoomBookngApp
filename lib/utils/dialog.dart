@@ -10,8 +10,10 @@ class DialogUtil {
   String message;
   String title;
   String buttontext;
+  Function btnOkOnPress;
+  Function btnCancelOnPress;
 
-  DialogUtil({this.context, this.message, this.title, this.buttontext="Ok"});
+  DialogUtil({this.context, this.message, this.title, this.buttontext,this.btnCancelOnPress,this.btnOkOnPress});
 
   showErrorDialog() {
     AwesomeDialog(
@@ -36,4 +38,22 @@ class DialogUtil {
       btnOkOnPress: () {},
     )..show();
   }
+
+  showWarningDialog(){
+
+    AwesomeDialog dialog=   AwesomeDialog(
+        context: context,
+        dialogType: DialogType.WARNING,
+        animType: AnimType.BOTTOMSLIDE,
+        title: title,
+        btnOkText: buttontext,
+        desc: message,
+        btnCancelOnPress:btnCancelOnPress,
+        btnOkOnPress:btnOkOnPress,
+      )..show();
+   return dialog;
+
+  }
+
+
 }

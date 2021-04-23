@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:kkconferences/Screens/SignInScreen/signin.dart';
 import 'package:kkconferences/global/Global.dart';
@@ -22,13 +24,42 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String _message = '';
+
+
   @override
   void initState() {
+    _registerOnFirebase();
+     getMessage();
+
+
     super.initState();
     Timer(Duration(seconds: 3), () {
       performNavigate();
     });
   }
+
+
+  _registerOnFirebase() {
+    _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.getToken().then((token) => log(token));
+  }
+  void getMessage() {
+    _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print('received message');
+          setState(() => _message = message["notification"]["body"]);
+        }, onResume: (Map<String, dynamic> message) async {
+      print('on resume $message');
+      setState(() => _message = message["notification"]["body"]);
+    }, onLaunch: (Map<String, dynamic> message) async {
+      print('on launch $message');
+      setState(() => _message = message["notification"]["body"]);
+    });
+  }
+
+
 
   performNavigate() async {
     if(Preference.getString(login_credentials) == null){

@@ -1,6 +1,10 @@
 
 import 'package:flutter/material.dart';
 
+
+enum appstate{default_state,loading,loading_complete,crash}
+
+
 //string
 
 const login_credentials="login_credentials";

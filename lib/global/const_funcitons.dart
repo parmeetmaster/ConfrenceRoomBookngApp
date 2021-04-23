@@ -36,34 +36,32 @@ String getFormattedTime(TimeOfDay picked) {
   }
   if (picked.hour > 12) {
     hour = picked.hour - 12;
-  }else{
+  } else {
     hour = picked.hour;
   }
-String minuteText="";
-  if(picked.minute<10){
- minuteText=   "0${picked.minute}";
-}else{
-    minuteText=   "${picked.minute}";
+  String minuteText = "";
+  if (picked.minute < 10) {
+    minuteText = "0${picked.minute}";
+  } else {
+    minuteText = "${picked.minute}";
   }
 
   return " $hour:$minuteText $timeType";
 }
 
-String getFirebaseFormatDate(DateTime date){
+String getFirebaseFormatDate(DateTime date) {
   final DateFormat formatter = DateFormat('dd-MM-yyyy');
   return formatter.format(date);
-
 }
 
-getDatewithTime(DateTime date,TimeOfDay time ){
-  return DateTime(date.year,date.month,date.day,time.hour,time.minute);
+getDatewithTime(DateTime date, TimeOfDay time) {
+  return DateTime(date.year, date.month, date.day, time.hour, time.minute);
 }
 
-getDateWith12HrsFormat(DateTime date){
+getDateWith12HrsFormat(DateTime date) {
   return DateFormat("h:mm a").format(date);
 }
 
-getBookingRegistrationNumberUsingTime(){
+getBookingRegistrationNumberUsingTime() {
   return DateTime.now().millisecondsSinceEpoch;
 }
-

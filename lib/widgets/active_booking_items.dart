@@ -118,24 +118,29 @@ class ActiveBookingItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.red[800],
-                  ),
-                  width: MediaQuery.of(context).size.width*.4,
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.close,color:Colors.white),
-                      SizedBox(width: 5,),
-                      Text(
-                    "Cancel",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
-                  ),
-                      SizedBox(width: 14,),
-                    ],
+                InkWell(
+                  onTap: (){
+                    oncancel();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.red[800],
+                    ),
+                    width: MediaQuery.of(context).size.width*.4,
+                    height: MediaQuery.of(context).size.height * 0.05,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.close,color:Colors.white),
+                        SizedBox(width: 5,),
+                        Text(
+                      "Cancel",
+                      style: TextStyle(color: Colors.white, fontSize: 17),
+                    ),
+                        SizedBox(width: 14,),
+                      ],
+                    ),
                   ),
                 )
               ],

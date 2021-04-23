@@ -40,7 +40,7 @@ class BookingScreenProvider extends ChangeNotifier {
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     curruntDateController.text = formatter.format(date);
 
-    showTodayMettings(date,carrage);
+    showTodayMettings(date, carrage);
     //  QuerySnapshot snapshot = await BookingHelper(context).getBookings(date);
   }
 
@@ -113,7 +113,11 @@ class BookingScreenProvider extends ChangeNotifier {
         },
         btnOkOnPress: () async {
           await BookingHelper().performBooking(context,
-              endTime: endTime, startTime: startTime, date: meeting_date,amount: totalAmount,carrage: carrage);
+              endTime: endTime,
+              startTime: startTime,
+              date: meeting_date,
+              amount: totalAmount,
+              carrage: carrage);
 
           //  await BookingHelper().checkIsBookingExist(endTime: endTime,startTime: startTime,date: meeting_date);
 
@@ -124,16 +128,17 @@ class BookingScreenProvider extends ChangeNotifier {
     print("amount paid is ${totalAmount}");
   }
 
-
-  void showTodayMettings(DateTime date,Carrage carrage) async {
+  void showTodayMettings(DateTime date, Carrage carrage) async {
     todayMeetings = [];
-    QuerySnapshot snapshot = await BookingHelper().getBookings(date,carrage);
+    QuerySnapshot snapshot = await BookingHelper().getBookings(date, carrage);
     for (QueryDocumentSnapshot item in snapshot.docs) {
       BookingModel model = BookingModel.fromJson(item.data());
       todayMeetings.add(model);
     }
     notifyListeners();
   }
+
+
 
 /* end There is payment gateway code */
 
