@@ -2,18 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kkconferences/Screens/SignInScreen/signin.dart';
+import 'package:kkconferences/Screens/SignUp/admin/signup_admin.dart';
 import 'package:kkconferences/Screens/my_bookings/my_bookings.dart';
 import 'package:kkconferences/providers/booking_screen_provider.dart';
 import 'package:kkconferences/providers/home_screen_provider.dart';
 import 'package:kkconferences/providers/my_booking_provider.dart';
 import 'package:kkconferences/providers/sign_in_provider.dart';
+import 'package:kkconferences/providers/staff/sign_up_admin_provider.dart';
 import 'package:kkconferences/utils/preference.dart';
 import 'package:kkconferences/widgets/active_booking_items.dart';
 import 'package:provider/provider.dart';
 
 import 'Screens/BookingScreen/booking_screen.dart';
 import 'Screens/HomeDetail/hotel_detail_page.dart';
-import 'Screens/SignUp/signup.dart';
+import 'Screens/SignUp/signup_user.dart';
 
 import 'Screens/HomeScreen/home_screen.dart';
 import 'Screens/splash_screen.dart';
@@ -29,6 +31,7 @@ void main() async {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (ctx) => SignUpProvider()),
+      ChangeNotifierProvider(create: (ctx) => SignUpAdminProvider()),
       ChangeNotifierProvider(create: (ctx) => SignInProvider()),
       ChangeNotifierProvider(create: (ctx) => HomeScreenProvider()),
       ChangeNotifierProvider(create: (ctx) => BookingScreenProvider()),
@@ -58,6 +61,7 @@ class MyApp extends StatelessWidget {
         HomePage.classname: (context) => HomePage(),
         MyBookings.classname: (context) => MyBookings(),
         SignUpScreen.classname: (context) => SignUpScreen(),
+        SignUpAdminScreen.classname: (context) => SignUpAdminScreen(),
         SignInPage.classname: (context) => SignInPage(),
         HotelDetailPage.classname: (context) => HotelDetailPage(),
         BookingScreen.classname: (context) => BookingScreen(),

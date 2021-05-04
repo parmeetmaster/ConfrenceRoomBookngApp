@@ -134,6 +134,7 @@ class BookingScreenProvider extends ChangeNotifier {
     for (QueryDocumentSnapshot item in snapshot.docs) {
       BookingModel model = BookingModel.fromJson(item.data());
       todayMeetings.add(model);
+      print(model.toJson());
     }
     notifyListeners();
   }

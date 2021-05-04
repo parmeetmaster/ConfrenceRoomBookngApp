@@ -10,7 +10,7 @@ import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/model/customer.dart';
 import 'package:kkconferences/utils/preference.dart';
 
-import 'SignUp/signup.dart';
+import 'SignUp/signup_user.dart';
 import 'HomeScreen/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:kkconferences/Screens/SignUp/signup.dart';
+import 'package:kkconferences/Screens/SignUp/admin/signup_admin.dart';
+import 'package:kkconferences/Screens/SignUp/signup_user.dart';
 import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/providers/sign_in_provider.dart';
+import 'package:kkconferences/providers/staff/sign_up_admin_provider.dart';
 import 'package:kkconferences/widgets/custom_shape.dart';
 import 'package:kkconferences/widgets/responsive_ui.dart';
+import 'package:kkconferences/widgets/sign_up_employee_radio_set.dart';
+import 'package:kkconferences/widgets/sign_up_user_radio_button.dart';
 import 'package:kkconferences/widgets/textformfield.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     final provider = Provider.of<SignInProvider>(context);
     provider.scaffoldkey = new GlobalKey<ScaffoldState>();
+    provider.context=context;
     _height = MediaQuery.of(context).size.height;
     _width = MediaQuery.of(context).size.width;
     _pixelRatio = MediaQuery.of(context).devicePixelRatio;
@@ -56,8 +61,13 @@ class _SignInScreenState extends State<SignInScreen> {
               form(),
               //   forgetPassTextRow(),
               SizedBox(height: _height / 12),
+              SignInAllUserRadioButton(onChange: (str){
+                final provider=Provider.of<SignInProvider>(context,listen: false);
+                provider.defautUser=str;
+              },),
               button(),
               signUpTextRow(),
+              signUpTextRow2(),
             ],
           ),
         ),
@@ -265,6 +275,37 @@ class _SignInScreenState extends State<SignInScreen> {
             },
             child: Text(
               "Sign up",
+              style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  color: Colors.orange[200],
+                  fontSize: _large ? 19 : (_medium ? 17 : 15)),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  Widget signUpTextRow2() {
+    return Container(
+      margin: EdgeInsets.only(top: _height / 120.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            "Don't have an account?",
+            style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: _large ? 14 : (_medium ? 12 : 10)),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, SignUpAdminScreen.classname);
+            },
+            child: Text(
+              "Sign up Admin",
               style: TextStyle(
                   fontWeight: FontWeight.w800,
                   color: Colors.orange[200],

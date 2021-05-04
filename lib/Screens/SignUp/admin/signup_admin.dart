@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:kkconferences/global/constants.dart';
-import 'package:kkconferences/providers/sign_up_provider.dart';
+import 'package:kkconferences/providers/staff/sign_up_admin_provider.dart';
 import 'package:kkconferences/widgets/custom_shape.dart';
 import 'package:kkconferences/widgets/customappbar.dart';
 import 'package:kkconferences/widgets/responsive_ui.dart';
+import 'package:kkconferences/widgets/sign_up_employee_radio_set.dart';
 import 'package:kkconferences/widgets/textformfield.dart';
 import 'package:provider/provider.dart';
 
-class SignUpScreen extends StatefulWidget {
-  static const classname="/SignUpScreen";
+class SignUpAdminScreen extends StatefulWidget {
+  static const classname="/SignUpAdminScreen";
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _SignUpAdminScreenState createState() => _SignUpAdminScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpAdminScreenState extends State<SignUpAdminScreen> {
   bool checkBoxValue = false;
   double _height;
   double _width;
@@ -23,14 +24,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void initState() {
-    final provider=Provider.of<SignUpProvider>(context,listen: false);
+    final provider=Provider.of<SignUpAdminProvider>(context,listen: false);
     provider.skey= new GlobalKey<ScaffoldState>();
   }
-
+var provider;
   @override
   Widget build(BuildContext context) {
-final provider=Provider.of<SignUpProvider>(context);
-provider.context=context;
+
+ provider=Provider.of<SignUpAdminProvider>(context);
+  provider.context=context;
 
     _height = MediaQuery.of(context).size.height;
     _width = MediaQuery.of(context).size.width;
@@ -50,7 +52,6 @@ provider.context=context;
               Opacity(opacity: 0.88,child: CustomAppBar()),
               clipShape(),
               form(),
-              acceptTermsTextRow(),
               SizedBox(height: _height/35,),
               button(),
            //   infoTextRow(),
@@ -155,6 +156,12 @@ provider.context=context;
             phoneTextFormField(),
             SizedBox(height: _height / 60.0),
             passwordTextFormField(),
+            SignUpRadioButtonAdmin(onChange:(str){
+              provider.signUpUserType=str;
+              setState(() {
+
+              });
+            })
           ],
         ),
       ),
@@ -163,7 +170,7 @@ provider.context=context;
 
   Widget firstNameTextFormField() {
     return CustomTextField(
-      textEditingController: Provider.of<SignUpProvider>(context,listen: false).firstnamecontroller,
+      textEditingController: Provider.of<SignUpAdminProvider>(context,listen: false).firstnamecontroller,
       keyboardType: TextInputType.text,
       icon: Icons.person,
       hint: "First Name",
@@ -172,7 +179,7 @@ provider.context=context;
 
   Widget lastNameTextFormField() {
     return CustomTextField(
-      textEditingController: Provider.of<SignUpProvider>(context,listen: false).lastnamecontroller,
+      textEditingController: Provider.of<SignUpAdminProvider>(context,listen: false).lastnamecontroller,
       keyboardType: TextInputType.text,
       icon: Icons.person,
       hint: "Last Name",
@@ -181,7 +188,7 @@ provider.context=context;
 
   Widget emailTextFormField() {
     return CustomTextField(
-      textEditingController: Provider.of<SignUpProvider>(context,listen: false).emailcontroller,
+      textEditingController: Provider.of<SignUpAdminProvider>(context,listen: false).emailcontroller,
       keyboardType: TextInputType.emailAddress,
       icon: Icons.email,
       hint: "Email ID",
@@ -190,7 +197,7 @@ provider.context=context;
 
   Widget phoneTextFormField() {
     return CustomTextField(
-      textEditingController: Provider.of<SignUpProvider>(context,listen: false).phonecontroller,
+      textEditingController: Provider.of<SignUpAdminProvider>(context,listen: false).phonecontroller,
       keyboardType: TextInputType.number,
       icon: Icons.phone,
       hint: "Mobile Number",
@@ -199,7 +206,7 @@ provider.context=context;
 
   Widget passwordTextFormField() {
     return CustomTextField(
-      textEditingController: Provider.of<SignUpProvider>(context,listen: false).passwordcontroller,
+      textEditingController: Provider.of<SignUpAdminProvider>(context,listen: false).passwordcontroller,
       keyboardType: TextInputType.text,
       obscureText: true,
       icon: Icons.lock,
@@ -235,7 +242,7 @@ provider.context=context;
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: (){
-        Provider.of<SignUpProvider>(context,listen: false).createUser();
+        Provider.of<SignUpAdminProvider>(context,listen: false).createUser();
     },
       textColor: Colors.white,
       padding: EdgeInsets.all(0.0),

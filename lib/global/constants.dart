@@ -15,3 +15,15 @@ const company_name="KK Conferences.";
 // colors
 const main_color=Color(0xFF01865b);
 const color_grid=[Color(0xFF01865b), Color(0xFFadfb60)];
+
+enum bookingstate{done,booked,cancel}
+
+//string
+
+const customer_credentials="customer_credentials";
+const staff_credentials="staff_credentials";
+
+// Testing code
+const test_mode = "Testing";
+const release_mode= "release";
+const currunt_mode= test_mode;
