@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+// todo active user must be known to do anywork in globals
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kkconferences/Screens/HomeScreen/home_screen.dart';
@@ -22,7 +22,7 @@ class SignUpAdminProvider extends ChangeNotifier {
   TextEditingController emailcontroller = new TextEditingController();
   TextEditingController phonecontroller = new TextEditingController();
   TextEditingController passwordcontroller = new TextEditingController();
-  String signUpUserType=SignUpRadioButtonAdmin.CLERK; // its shows default value onadmin sign up
+  String defautUser=SignUpRadioButtonAdmin.CLERK; // its shows default value onadmin sign up
   GlobalKey<ScaffoldState> skey;
   BuildContext context;
 
@@ -84,7 +84,7 @@ class SignUpAdminProvider extends ChangeNotifier {
     if (iserror == true) return;
     StaffModel staffModel= StaffModel(
         staffid: getUuid(),
-        authority: signUpUserType,
+        authority: defautUser,
         name: firstnamecontroller.text + lastnamecontroller.text,
         email: emailcontroller.text,
         phoneNumber: phonecontroller.text,
@@ -93,8 +93,9 @@ class SignUpAdminProvider extends ChangeNotifier {
     showMessage(this.skey, res.msg);
 
     if (res.status == 1) {
-      Global.activeStaff=staffModel;
-      Preference.setString(staff_credentials, jsonEncode(staffModel));
+   /*   Global.activeStaff=staffModel;
+      Preference.setString(staff_credentials, jsonEncode(staffModel));*/
+      // THERE IS NO NEED TO DO BECAUSE ADMIN SHIP NO BE DENIED
      // Navigator.pushNamedAndRemoveUntil(context, HomePage.classname, (route) => false);
     }
   }

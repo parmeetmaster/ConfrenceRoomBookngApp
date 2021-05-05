@@ -102,7 +102,6 @@ class FireBaseApi {
     return await FirebaseFirestore.instance
         .collection("Bookings")
         .where("bookingUserId", isEqualTo: customer.customerId)
-        .orderBy("bookingId",descending: false)
         .orderBy("createdon",descending: true)
         .get()
         .then((value) {

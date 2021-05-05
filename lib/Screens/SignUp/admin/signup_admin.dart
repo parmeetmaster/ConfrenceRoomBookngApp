@@ -157,7 +157,7 @@ var provider;
             SizedBox(height: _height / 60.0),
             passwordTextFormField(),
             SignUpRadioButtonAdmin(onChange:(str){
-              provider.signUpUserType=str;
+              provider.defautUser=str;
               setState(() {
 
               });

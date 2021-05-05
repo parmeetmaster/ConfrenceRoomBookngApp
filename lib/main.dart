@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:kkconferences/Screens/AdminBookingScreen/day_wise_booking.dart';
 import 'package:kkconferences/Screens/SignInScreen/signin.dart';
 import 'package:kkconferences/Screens/SignUp/admin/signup_admin.dart';
 import 'package:kkconferences/Screens/my_bookings/my_bookings.dart';
@@ -65,7 +66,8 @@ class MyApp extends StatelessWidget {
         SignInPage.classname: (context) => SignInPage(),
         HotelDetailPage.classname: (context) => HotelDetailPage(),
         BookingScreen.classname: (context) => BookingScreen(),
-        MyBookings.classname: (context) => MyBookings()
+        MyBookings.classname: (context) => MyBookings(),
+        DayWiseBookings.classname: (context) => DayWiseBookings()
       },
     );
   }

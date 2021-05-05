@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       drawer: Drawer(
         child:  BookingScreenDrawer(username: Global.activeCustomer.customerName,
-      email:  Global.activeCustomer.email,)  ,
+      email:  Global.activeCustomer.email,),
       ),
       appBar: AppBar(),
       body: HomeListBody(),

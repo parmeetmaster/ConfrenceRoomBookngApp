@@ -19,6 +19,7 @@ class BookingModel {
       this.iscancel,
       this.amount,
       this.createdon,
+        this.applyCancelDate,
       this.roomno});
 
   String bookingDate;
@@ -33,6 +34,7 @@ class BookingModel {
   String amount;
   int createdon;
   String roomno;
+  DateTime applyCancelDate;
 
   factory BookingModel.fromRawJson(String str) =>
       BookingModel.fromJson(json.decode(str));
@@ -51,6 +53,7 @@ class BookingModel {
       iscancel: json["iscancel"],
       amount: json["amount"],
       createdon: json["createdon"],
+      applyCancelDate: json["applyCancelDate"],
       roomno: json["roomno"]);
 
   Map<String, dynamic> toJson() => {
@@ -66,5 +69,6 @@ class BookingModel {
         "amount": amount,
         "createdon": createdon,
         "roomno": roomno,
+        "applyCancelDate": applyCancelDate,
       };
 }

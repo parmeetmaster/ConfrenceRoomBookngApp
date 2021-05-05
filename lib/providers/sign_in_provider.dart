@@ -17,7 +17,7 @@ class SignInProvider extends ChangeNotifier {
   GlobalKey<ScaffoldState> scaffoldkey;
   Function() onsuccessNavigateHome;
   BuildContext context;
-  String defautUser=SignInAllUserRadioButton.CUSTOMER;
+  String defautUser=CUSTOMER;
 
   void performSignIn() async {
     if (checkButtonEnable() == true) {
@@ -44,7 +44,7 @@ class SignInProvider extends ChangeNotifier {
       return;
     }
 
-    if(defautUser==SignInAllUserRadioButton.CUSTOMER){
+    if(defautUser==CUSTOMER){
       signInCustomer();
     }
 
@@ -61,8 +61,10 @@ class SignInProvider extends ChangeNotifier {
 
       showMessage(scaffoldkey, result.msg);
       Global.activeCustomer=result.customer;
-      Navigator.of(context).pushNamedAndRemoveUntil(HomePage.classname, (route) => false);
+      Preference.setString(login_credentials,jsonEncode(result.customer));
+      Preference.setString(activeUser_pref,CUSTOMER);
       print("name of active customer is ${Global.activeCustomer.email}");
+      Navigator.of(context).pushNamedAndRemoveUntil(HomePage.classname, (route) => false);
     } else if (result.status == 0) {
       // on failed
       showMessage(scaffoldkey, result.msg);

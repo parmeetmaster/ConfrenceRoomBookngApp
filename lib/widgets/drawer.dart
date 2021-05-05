@@ -3,9 +3,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:kkconferences/Screens/SignInScreen/signin.dart';
 import 'package:kkconferences/Screens/my_bookings/my_bookings.dart';
 import 'package:kkconferences/api/FirbaseApi.dart';
 import 'package:kkconferences/global/Global.dart';
+import 'package:kkconferences/global/constants.dart';
+import 'package:kkconferences/utils/preference.dart';
 import 'package:kkconferences/widgets/active_booking_items.dart';
 
 class BookingScreenDrawer extends StatefulWidget {
@@ -41,14 +44,22 @@ class _BookingScreenDrawerState extends State<BookingScreenDrawer> {
         ListTile(
           onTap: () async{
       Navigator.pushNamed(context, MyBookings.classname);
-
        },
-
           title: Text("All Bookings"),
           trailing: Icon(Icons.arrow_forward),
         ),
         ListTile(
           title: Text("Cancel Bookings"),
+          trailing: Icon(Icons.arrow_forward),
+        ),
+        ListTile( onTap: () async{
+          Global.activeCustomer=null;
+          Preference.setString(login_credentials,null);
+          Preference.setString(activeUser_pref,null);
+          Navigator.pushNamed(context,SignInPage.classname);
+
+        },
+          title: Text("LogOut"),
           trailing: Icon(Icons.arrow_forward),
         ),
       ],

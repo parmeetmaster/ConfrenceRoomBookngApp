@@ -8,15 +8,16 @@ class ActiveBookingItem extends StatelessWidget {
   String end_duration;
   String date_of_booking;
   Function oncancel;
+  bool disablecancel;
 
   ActiveBookingItem(
       {this.title = "Room name",
-      this.amount="0",
+      this.amount = "0",
       this.start_duration,
       this.end_duration,
       this.oncancel,
-      this.date_of_booking
-      });
+      this.disablecancel = false,
+      this.date_of_booking});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,8 @@ class ActiveBookingItem extends StatelessWidget {
       padding: EdgeInsets.all(10),
       height: 450,
       child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           shadowColor: Colors.black38,
           elevation: 9,
           child: Container(
@@ -118,8 +120,9 @@ class ActiveBookingItem extends StatelessWidget {
                     ),
                   ),
                 ),
+               if(disablecancel==false)
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     oncancel();
                   },
                   child: Container(
@@ -127,22 +130,55 @@ class ActiveBookingItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.red[800],
                     ),
-                    width: MediaQuery.of(context).size.width*.4,
+                    width: MediaQuery.of(context).size.width * .4,
                     height: MediaQuery.of(context).size.height * 0.05,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.close,color:Colors.white),
-                        SizedBox(width: 5,),
+                        Icon(Icons.close, color: Colors.white),
+                        SizedBox(
+                          width: 5,
+                        ),
                         Text(
-                      "Cancel",
-                      style: TextStyle(color: Colors.white, fontSize: 17),
-                    ),
-                        SizedBox(width: 14,),
+                          "Cancel",
+                          style: TextStyle(color: Colors.white, fontSize: 17),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
                       ],
                     ),
                   ),
                 )
+             else if(disablecancel==true)
+                  InkWell(
+                    onTap: () {
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey[500],
+                      ),
+                      width: MediaQuery.of(context).size.width * .4,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.close, color: Colors.white),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Cancel",
+                            style: TextStyle(color: Colors.white, fontSize: 17),
+                          ),
+                          SizedBox(
+                            width: 14,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
               ],
             ),
           )),

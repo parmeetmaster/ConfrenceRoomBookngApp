@@ -74,12 +74,13 @@ class SignUpProvider extends ChangeNotifier {
         email: emailcontroller.text,
         phno: phonecontroller.text,
         password: passwordcontroller.text);
-    CustomerResult res = await FireBaseApi().createCustomer(customer) as CustomerResult;
-    showMessage(this.skey, res.msg);
+        CustomerResult res = await FireBaseApi().createCustomer(customer) as CustomerResult;
+        showMessage(this.skey, res.msg);
 
     if (res.status == 1) {
       Global.activeCustomer=customer;
       Preference.setString(login_credentials, jsonEncode(customer));
+      Global.activeUser=CUSTOMER;
       Navigator.pushNamedAndRemoveUntil(context, HomePage.classname, (route) => false);
     }
   }

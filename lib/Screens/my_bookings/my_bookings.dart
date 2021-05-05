@@ -54,6 +54,7 @@ class _MyBookingsState extends State<MyBookings> {
       oncancel: () {
         provider.performCancelBooking(index);
       },
+      disablecancel: !(DateTime.now().difference(mybooking.bookingEndTime).inSeconds.isNegative),
     );
   }
 }
