@@ -19,7 +19,7 @@ class _HotelDetailPageState extends State<HotelDetailPage> {
   @override
   Widget build(BuildContext context) {
 
-    ConfressModel room=ModalRoute.of(context).settings.arguments;
+    RoomInfo room=ModalRoute.of(context).settings.arguments;
 
     return Container(
       color: Theme.of(context).canvasColor,
@@ -59,7 +59,7 @@ class HotelFeedBodyBackground extends StatelessWidget {
     @required this.room,
   }) : super(key: key);
 
-  final   ConfressModel room;
+  final   RoomInfo room;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,7 @@ class HotelFeedBodyBackground extends StatelessWidget {
 }
 
 class HotelFeedBody extends StatelessWidget {
-  final   ConfressModel room;
+  final   RoomInfo room;
 
   const HotelFeedBody({Key key, this.room}) : super(key: key);
   @override

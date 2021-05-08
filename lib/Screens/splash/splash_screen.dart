@@ -5,13 +5,17 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:kkconferences/Screens/SignInScreen/signin.dart';
+import 'package:kkconferences/Screens/splash/splash_helper.dart';
+import 'package:kkconferences/api/firebase_clerk_api.dart';
 import 'package:kkconferences/global/Global.dart';
 import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/model/customer.dart';
+import 'package:kkconferences/model/staff_model.dart';
 import 'package:kkconferences/utils/preference.dart';
 
-import 'SignUp/signup_user.dart';
-import 'HomeScreen/home_screen.dart';
+import '../AdminBookingScreen/day_wise_booking.dart';
+import '../SignUp/signup_user.dart';
+import '../HomeScreen/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const classname="/SplashScreen";
@@ -62,6 +66,31 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   performNavigate() async {
+     await SplashHelper().initRoomInfo(context);
+
+
+    String active_user_type=await Preference.getString(activeUser_pref);
+
+    if(active_user_type == null){
+      print("user not logged in yet");
+      Navigator.pushReplacementNamed(context, SignInPage.classname);
+    }else{
+
+      if(active_user_type==CUSTOMER){
+        performCustomerNavigate();
+      }else if(active_user_type==CLERK){
+        performStaffNavigate();
+      }
+
+    }
+
+
+    //FireBaseApi().checkUserExist(Customer(email: "abc@gmail.com"));
+  }
+
+
+  performCustomerNavigate(){
+
     if(Preference.getString(login_credentials) == null){
       print("user not logged in yet");
       Navigator.pushReplacementNamed(context, SignInPage.classname);
@@ -71,8 +100,22 @@ class _SplashScreenState extends State<SplashScreen> {
       print("name of active customer is ${Global.activeCustomer.email}");
     }
 
-    //FireBaseApi().checkUserExist(Customer(email: "abc@gmail.com"));
   }
+
+  performStaffNavigate() async{
+   String staff_data= await Preference.getString(staff_credentials);
+    if( staff_data == null){
+      print("user not logged in yet");
+      Navigator.pushReplacementNamed(context, SignInPage.classname);
+    }else{
+      Global.activeStaff=StaffModel.fromJson(jsonDecode(Preference.getString(staff_credentials)));
+      Navigator.of(context).pushNamedAndRemoveUntil(DayWiseBookings.classname, (route) => false);
+      print("name of active staff is ${Global.activeStaff.email}");
+    }
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

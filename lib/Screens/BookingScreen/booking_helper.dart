@@ -9,7 +9,10 @@ import 'package:kkconferences/global/const_funcitons.dart';
 import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/model/booking_model.dart';
 import 'package:kkconferences/model/carrage_model.dart';
+import 'package:kkconferences/providers/booking_screen_provider.dart';
+import 'package:kkconferences/providers/my_booking_provider.dart';
 import 'package:kkconferences/utils/dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -75,6 +78,7 @@ class BookingHelper {
       TimeOfDay startTime,
       DateTime date,
       double amount,Carrage carrage}) async {
+    this.context=context;// this for referesh screen
 
     this.carrage=carrage;
 
@@ -135,13 +139,17 @@ class BookingHelper {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print("${response.paymentId}");
+  void _handlePaymentSuccess(PaymentSuccessResponse response)async {
+    print("resp data: ${response.paymentId} ${response.orderId} ${response.signature}");
+    final provider=Provider.of<BookingScreenProvider>(context,listen: false);
+    provider.showTodayMettings(date, carrage);
+    provider.notifyListeners();
+
     Fluttertoast.showToast(
         msg: "SUCCESS: " + response.paymentId, timeInSecForIosWeb: 4);
     startTime = TimeOfDay(hour: startTime.hour, minute: startTime.minute + 1);
     var uuid = Uuid();
-    FireBaseApi().addBookingEntery(
+   await FireBaseApi().addBookingEntery(
         model: BookingModel(
           bookingDate: getFirebaseFormatDate(date),
           bookingStartTime: getDatewithTime(date, startTime),
@@ -156,10 +164,10 @@ class BookingHelper {
           bookingId: uuid.v4(),
           bookingStatus: false,
           amount: amount.toString(),
+          paymentId: response.paymentId,
+          orderId: response.orderId,
+          signature: response.signature
         ));
-
-
-
 
   }
 

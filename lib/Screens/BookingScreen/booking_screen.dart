@@ -22,7 +22,7 @@ class _BookingScreenState extends State<BookingScreen> {
     return Scaffold(
       key: provider.key,
       appBar: AppBar(
-        title: Text("Book Room"),
+        title: Text("Book Conference Room Panel"),
         backgroundColor: main_color,
       ),
       body: Consumer<BookingScreenProvider>(builder: (context, value, child) {
@@ -61,7 +61,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             autocorrect: true,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(0),
-                              hintText: 'Date',
+                              hintText: 'Choose Meeting Date here...',
                               hintStyle:
                                   TextStyle(color: Colors.grey, fontSize: 15),
                               filled: true,
@@ -269,7 +269,7 @@ class _BookingScreenState extends State<BookingScreen> {
   void initState() {
     final provider = Provider.of<BookingScreenProvider>(context, listen: false);
     provider.key = GlobalKey<ScaffoldState>();
-
+  provider.todayMeetings=[];
   }
 
   void dispose() {

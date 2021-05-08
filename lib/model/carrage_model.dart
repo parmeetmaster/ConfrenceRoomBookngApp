@@ -6,7 +6,7 @@ import 'booking_model.dart';
 
 class Carrage{
 
-  ConfressModel confressModel;
+  RoomInfo confressModel;
   BookingModel bookingModel;
 
   Carrage({this.confressModel, this.bookingModel});

@@ -20,7 +20,14 @@ class BookingModel {
       this.amount,
       this.createdon,
         this.applyCancelDate,
-      this.roomno});
+       this.roomno,
+        this.paymentId,
+        this.orderId,
+        this.signature,
+        this.approvePerson
+
+
+      });
 
   String bookingDate;
   DateTime bookingStartTime;
@@ -35,6 +42,11 @@ class BookingModel {
   int createdon;
   String roomno;
   DateTime applyCancelDate;
+  String paymentId;
+  String orderId;
+  String signature;
+  String approvePerson;
+
 
   factory BookingModel.fromRawJson(String str) =>
       BookingModel.fromJson(json.decode(str));
@@ -54,7 +66,14 @@ class BookingModel {
       amount: json["amount"],
       createdon: json["createdon"],
       applyCancelDate: json["applyCancelDate"],
-      roomno: json["roomno"]);
+      roomno: json["roomno"],
+
+      paymentId: json["paymentId"],
+      orderId: json["orderId"],
+      signature: json["signature"],
+    approvePerson: json["approvePerson"],
+
+  );
 
   Map<String, dynamic> toJson() => {
         "bookingDate": bookingDate,
@@ -70,5 +89,10 @@ class BookingModel {
         "createdon": createdon,
         "roomno": roomno,
         "applyCancelDate": applyCancelDate,
+
+    "paymentId": paymentId,
+    "orderId": orderId,
+    "signature": signature,
+    "approvePerson": approvePerson,
       };
 }

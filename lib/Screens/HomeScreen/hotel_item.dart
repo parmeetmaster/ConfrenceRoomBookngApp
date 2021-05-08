@@ -8,7 +8,7 @@ import 'package:kkconferences/widgets/ticket_rent.dart';
 
 class BookingRoomItem extends StatelessWidget {
 
- final ConfressModel room;
+ final RoomInfo room;
   const BookingRoomItem({Key key, this.room}) : super(key: key);
 
   @override

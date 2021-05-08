@@ -15,7 +15,7 @@ class HotelInformationTab extends StatefulWidget {
     @required this.room,
   }) : super(key: key);
 
-  ConfressModel room;
+  RoomInfo room;
 
   @override
   _HotelInformationTabState createState() => _HotelInformationTabState();
@@ -41,21 +41,28 @@ class _HotelInformationTabState extends State<HotelInformationTab> {
         SizedBox(height: 8),
         Row(
           children: [
-            Text(
-              widget.room.name,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'Avenir',
-                fontWeight: FontWeight.w700,
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  widget.room.name,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Avenir',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ),
-            Spacer(),
-            InkWell(
-              onTap: ()=>Navigator.pushNamed(context, BookingScreen.classname,arguments: Carrage(confressModel: widget.room)),
-              child: BuyNow(
-                title: 'Book Now',
-                color: main_color,
+           // Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(left:10.0),
+              child: InkWell(
+                onTap: ()=>Navigator.pushNamed(context, BookingScreen.classname,arguments: Carrage(confressModel: widget.room)),
+                child: BuyNow(
+                  title: 'Book Now',
+                  color: main_color,
+                ),
               ),
             )
           ],

@@ -91,7 +91,7 @@ class FireBaseApi {
   Future<QuerySnapshot> getSelectedDateBookings({BookingModel model}) async {
     return await FirebaseFirestore.instance
         .collection("Bookings")
-        .where("bookingDate", isEqualTo: model.bookingDate) .where("roomno", isEqualTo: model.roomno)
+        .where("bookingDate", isEqualTo: model.bookingDate) .where("roomno", isEqualTo: model.roomno).orderBy("bookingStartduration",descending: false)
         .get()
         .then((value) {
       return value;

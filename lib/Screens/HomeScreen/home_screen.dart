@@ -62,7 +62,7 @@ class _HomeListBodyState extends State<HomeListBody> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final provider=Provider.of<HomeScreenProvider>(context,listen: false);
-    provider.init();
+    //provider.init();
   }
 
   @override
