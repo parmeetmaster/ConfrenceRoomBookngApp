@@ -26,7 +26,7 @@ class _DayWiseBookingsState extends State<DayWiseBookings> {
         title: Text("Today Bookings "),
       ),
       drawer: Drawer(
-        child: BookingScreenDrawer(
+        child: CommonDrawer(
           username: Global.activeStaff.name,
           email: Global.activeStaff.email,
         ),
@@ -106,8 +106,8 @@ class _DayWiseBookingsState extends State<DayWiseBookings> {
                 child: ListView(
                   //shrinkWrap: true,
                   children: [
-                    ...value.list_of_bookings.map((e) => BookingRequest(
-                          title: "Conference Room " + e.roomno ?? "",
+                 /*   ...value.list_of_bookings.map((e) => BookingRequest(
+                          title: "Conference Room " + e.room ?? "",
                           amount: e.amount ?? "",
                           start_duration:
                               getDateWith12HrsFormat(e.bookingStartTime),
@@ -130,7 +130,7 @@ class _DayWiseBookingsState extends State<DayWiseBookings> {
                           },
                           disableapprove: e.bookingStatus ?? false,
                         ))
-                  ],
+                 */ ],
                 ),
               ),
             ],

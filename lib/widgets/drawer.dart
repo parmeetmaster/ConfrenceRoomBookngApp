@@ -11,18 +11,18 @@ import 'package:kkconferences/global/constants.dart';
 import 'package:kkconferences/utils/preference.dart';
 import 'package:kkconferences/widgets/active_booking_items.dart';
 
-class BookingScreenDrawer extends StatefulWidget {
+class CommonDrawer extends StatefulWidget {
   String username;
   String email;
 
 
-  BookingScreenDrawer({this.username="?", this.email=""});
+  CommonDrawer({this.username="?", this.email=""});
 
   @override
-  _BookingScreenDrawerState createState() => _BookingScreenDrawerState();
+  _CommonDrawerState createState() => _CommonDrawerState();
 }
 
-class _BookingScreenDrawerState extends State<BookingScreenDrawer> {
+class _CommonDrawerState extends State<CommonDrawer> {
   @override
   Widget build(BuildContext context) {
     return    ListView(

@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
-        child:  BookingScreenDrawer(username: Global.activeCustomer.customerName,
+        child:  CommonDrawer(username: Global.activeCustomer.customerName,
       email:  Global.activeCustomer.email,),
       ),
       appBar: AppBar(),

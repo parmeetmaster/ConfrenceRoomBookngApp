@@ -24,8 +24,8 @@ class BookingModel {
         this.paymentId,
         this.orderId,
         this.signature,
-        this.approvePerson
-
+        this.approvePerson,
+        this.roomname
 
       });
 
@@ -46,6 +46,7 @@ class BookingModel {
   String orderId;
   String signature;
   String approvePerson;
+  String roomname;
 
 
   factory BookingModel.fromRawJson(String str) =>
@@ -60,6 +61,7 @@ class BookingModel {
       bookingEndTime: DateTime.parse(json["bookingEndTime"]),
       bookingEndduration: json["bookingEndduration"],
       bookingId: json["bookingId"],
+    roomname: json["roomname"],
       bookingUserId: json["bookingUserId"],
       bookingStatus: json["bookingStatus"],
       iscancel: json["iscancel"],
@@ -86,6 +88,7 @@ class BookingModel {
         "bookingStatus": bookingStatus,
         "iscancel": iscancel,
         "amount": amount,
+        "roomname": roomname,
         "createdon": createdon,
         "roomno": roomno,
         "applyCancelDate": applyCancelDate,

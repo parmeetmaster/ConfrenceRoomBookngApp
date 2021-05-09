@@ -96,7 +96,7 @@ class BookingScreenProvider extends ChangeNotifier {
       hourDifference += 1;
     }
 
-    double totalAmount = hourDifference * 100.toDouble();
+ //   double totalAmount = hourDifference * 100.toDouble();
     AwesomeDialog(
         context: context,
         dialogType: DialogType.WARNING,
@@ -116,7 +116,7 @@ class BookingScreenProvider extends ChangeNotifier {
               endTime: endTime,
               startTime: startTime,
               date: meeting_date,
-              amount: totalAmount,
+              hourdifference: hourDifference,
               carrage: carrage);
 
           //  await BookingHelper().checkIsBookingExist(endTime: endTime,startTime: startTime,date: meeting_date);
@@ -125,7 +125,7 @@ class BookingScreenProvider extends ChangeNotifier {
               totalAmount * 100, "Amount paid for $hourDifference hrs meeting");*/
         })
       ..show();
-    print("amount paid is ${totalAmount}");
+   // print("amount paid is ${totalAmount}");
   }
 
   void showTodayMettings(DateTime date, Carrage carrage) async {

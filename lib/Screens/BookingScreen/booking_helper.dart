@@ -21,6 +21,8 @@ class BookingHelper {
   BookingModel errorModel;
   Razorpay razorpay;
   Carrage carrage;
+ static int amountPaidCurruntTransaction;
+
   getBookings(DateTime date,Carrage carrage) async {
 
     QuerySnapshot snapshot = await FireBaseApi().getSelectedDateBookings(
@@ -77,7 +79,7 @@ class BookingHelper {
       { endTime,
       TimeOfDay startTime,
       DateTime date,
-      double amount,Carrage carrage}) async {
+      int hourdifference,Carrage carrage}) async {
     this.context=context;// this for referesh screen
 
     this.carrage=carrage;
@@ -100,7 +102,7 @@ class BookingHelper {
     this.amount=amount;
 
    await initRazorPay();
-   openCheckout(amount, "Booking for ${getFormattedTime(startTime)} to ${getFormattedTime(endTime)} on ${getFirebaseFormatDate(date)}");
+   openCheckout( hourdifference,"Booking for ${getFormattedTime(startTime)} to ${getFormattedTime(endTime)} on ${getFirebaseFormatDate(date)}");
   }
 
   void convertSecondsToTime(int seconds) {
@@ -120,10 +122,11 @@ class BookingHelper {
     razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
-  void openCheckout(double amount, String description) async {
+  void openCheckout(int hourdifference, String description) async {
+    amountPaidCurruntTransaction=(hourdifference*carrage.confressModel.price);
     var options = {
       'key': razor_key,
-      'amount': carrage.confressModel.price*100, // price show here
+      'amount': (hourdifference*carrage.confressModel.price)*100, // price show here
       'name': '$company_name',
       'description': '$description',
       'prefill': {'contact': ' $phno', 'email': '$email'},
@@ -160,10 +163,11 @@ class BookingHelper {
           Duration(hours: endTime.hour, minutes: endTime.minute).inSeconds,
           bookingUserId: Global.activeCustomer.customerId,
           roomno: carrage.confressModel.roomNo,
+          roomname: carrage.confressModel.name,
           // todo need to use unique id during login
           bookingId: uuid.v4(),
           bookingStatus: false,
-          amount: amount.toString(),
+          amount: amountPaidCurruntTransaction.toString(),
           paymentId: response.paymentId,
           orderId: response.orderId,
           signature: response.signature
